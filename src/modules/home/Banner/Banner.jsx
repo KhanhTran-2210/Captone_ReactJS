@@ -14,7 +14,7 @@ export default function Banner() {
   }
   return (
     <div>
-      {banners.map((banner) => {
+      {banners?.map((banner) => {
         return (
           <img
             key={banner.maBanner}
