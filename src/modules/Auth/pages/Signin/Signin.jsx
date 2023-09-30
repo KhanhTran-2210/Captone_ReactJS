@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string } from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { signin } from "../../../../apis/userAPI";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { useUserContext } from "../../../../contexts/UserContext/UserContext";
+import style from "../../../../style.module.css";
+import {
+  Container,
+  TextField,
+  Box,
+  IconButton,
+  InputAdornment,
+  Button,
+} from "@mui/material";
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PersonIcon from "@mui/icons-material/Person";
 
 const signinSchema = object({
   taiKhoan: string().required("Tài khoản không được để trống"),
@@ -17,7 +29,18 @@ const signinSchema = object({
     ),
 });
 export default function Signin() {
-  const { currentUser, handleSigin: onSigninSuccess } = useUserContext();
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value);
+  };
+  const { currentUser, handleSignin: onSigninSuccess } = useUserContext();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const {
     register,
@@ -48,31 +71,77 @@ export default function Signin() {
   };
   // currentUser khác null => user đã đăng nhập => điều hướng về Home
   if (currentUser) {
-    return <Navigate to="/" replace />;
+    const redirectTo = searchParams.get("redirectTo");
+    return <Navigate to={redirectTo || "/"} replace />;
   }
+  // if (currentUser.maLoaiNguoiDung !== "QuanTri") {
+  //   return <Navigate to="/404" />;
+  // }
   return (
-    <div>
-      <h1>Sign-In</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div>
-            <input placeholder="Tài khoản" {...register("taiKhoan")} />
-            {errors.taiKhoan && <p>{errors.taiKhoan.message}</p>}
-          </div>
-          <div>
-            <input
-              placeholder="Mật khẩu"
-              {...register("matKhau")}
-              type="password"
-            />
-            {errors.matKhau && <p>{errors.matKhau.message}</p>}
-          </div>
+    <div className={style.background_signin}>
+      <Container maxWidth="xs" className={style.modal_sign}>
+        <div className={style.modalIn}>
+          <PersonIcon fontSize="large" color="error" />
+          <h4>Đăng nhập</h4>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+            }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className={style.inputForm}>
+                <div>
+                  <TextField
+                    id="outlined-basic"
+                    label="Tài khoản"
+                    variant="outlined"
+                    fullWidth
+                    {...register("taiKhoan")}
+                    error={!!errors.taiKhoan}
+                    helperText={errors.taiKhoan?.message}
+                  />
+                </div>
+                <div>
+                  <TextField
+                    {...register("matKhau")}
+                    fullWidth
+                    error={!!errors.matKhau}
+                    helperText={errors.matKhau?.message}
+                    variant="outlined"
+                    label="Password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={handleChangePassword}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleTogglePasswordVisibility}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                disabled={isLoading}
+                color="error"
+              >
+                Đăng nhập
+              </Button>
+              {error && <p>{error}</p>}
+            </form>
+          </Box>
         </div>
-        <button type="submit" disabled={isLoading}>
-          Đăng nhập
-        </button>
-        {error && <p>{error}</p>}
-      </form>
+      </Container>
     </div>
   );
 }
