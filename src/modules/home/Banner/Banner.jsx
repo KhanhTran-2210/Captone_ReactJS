@@ -31,7 +31,7 @@ export default function Banner() {
   }
   return (
     <div>
-      {/* <Swiper
+      <Swiper
         spaceBetween={30}
         centeredSlides={true}
         autoplay={{
@@ -63,7 +63,7 @@ export default function Banner() {
             </SwiperSlide>
           );
         })}
-      </Swiper> */}
+      </Swiper>
       <div style={{ width: "100%" }}>
         <Box sx={{ width: "100%", height: 70 }}>
           <Grid container>

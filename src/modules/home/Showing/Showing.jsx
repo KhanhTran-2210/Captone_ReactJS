@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getMovies } from "../../../apis/movieAPI";
-import { getVideoId } from "./videoUltils";
+import getVideoId from "./videoUltils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -11,27 +11,21 @@ import { Box, Grid, Button, Container, Modal, Dialog } from "@mui/material";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import ReactPlayer from "react-player";
 import style from "../../../style.module.css";
-import CustomDialog from "./DialogCustom";
 
-export default function Showing({ videoUrl }) {
+export default function Showing() {
   const { data = [], isLoading } = useQuery({
     queryKey: ["movies"],
     queryFn: getMovies,
   });
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const videoId = getVideoId(videoUrl);
-  console.log("Vid ID:", videoId);
-  if (!videoId) {
-    return <div>URL không hợp lệ.</div>;
-  }
+  // const handleOpen = () => {
+  //   setOpen(true);
+  // };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+  const [showOverlay, setShowOverlay] = useState(false);
 
   return (
     <div>
@@ -45,7 +39,11 @@ export default function Showing({ videoUrl }) {
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
                 {data.map((movie) => {
-                  // console.log(movie.trailer.slice(32, movie.trailer.length));
+                  const videoId = getVideoId(movie.trailer);
+                  console.log(videoId);
+                  // if (!videoId) {
+                  //   return <div key={movie.maPhim}>Invalid URL</div>;
+                  // }
                   return (
                     <Grid item xs={2} sm={4} md={4} key={movie.maPhim}>
                       <div>
@@ -69,7 +67,12 @@ export default function Showing({ videoUrl }) {
                                   lineHeight: "314px",
                                 }}
                               >
-                                <Button onClick={handleOpen}>
+                                <Button
+                                  onClick={() => {
+                                    setOpen(true);
+                                    setShowOverlay(true);
+                                  }}
+                                >
                                   <PlayCircleOutlineIcon
                                     fontSize="large"
                                     className={style.iconPlay}
@@ -89,21 +92,25 @@ export default function Showing({ videoUrl }) {
                           </Grid>
                         </Grid>
                       </div>
-                      {/* <div>
-                        {setOpen && (
-                          <div>
+                      {/* <div style={{ position: "relative" }}>
+                        {open && (
+                          <div className={style.overlayVid}>
                             <ReactPlayer
                               controls
                               width="100%"
                               height="100%"
                               url={movie.trailer}
-                              onEnded={handleClose}
+                              onEnded={() => {
+                                setOpen(false);
+                                setShowOverlay(false);
+                              }}
                             />
                           </div>
-                        )} */}
+                        )}
+                      </div> */}
                       <div>
                         {open && (
-                          <Dialog open={open} onClose={handleClose}>
+                          <Dialog open={open} onClose={() => setOpen(false)}>
                             <iframe
                               id="my-iframe-id"
                               width="100%"
