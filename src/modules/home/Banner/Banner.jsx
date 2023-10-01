@@ -27,7 +27,16 @@ export default function Banner() {
   } = useQuery({ queryKey: ["banners"], queryFn: getBanner });
 
   if (isLoading) {
-    return <h1>Loading ...</h1>;
+    return (
+      <div>
+        <img
+          src="./img/animation_lmvydl73_small.gif"
+          alt=""
+          width="100%"
+          height="100%"
+        />
+      </div>
+    );
   }
   return (
     <div>
@@ -64,7 +73,7 @@ export default function Banner() {
           );
         })}
       </Swiper>
-      <div style={{ width: "100%" }}>
+      {/* <div style={{ width: "100%" }}>
         <Box sx={{ width: "100%", height: 70 }}>
           <Grid container>
             <div>
@@ -102,7 +111,7 @@ export default function Banner() {
             </Grid>
           </Grid>
         </Box>
-      </div>
+      </div> */}
     </div>
   );
 }
