@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, Button, Grid } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import style from "../../style.module.css";
+import style from "./headerStyle.module.css";
 
 export default function Header() {
   const { currentUser, handleSignout } = useUserContext();

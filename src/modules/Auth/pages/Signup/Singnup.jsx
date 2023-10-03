@@ -16,7 +16,7 @@ import {
 import LockIcon from "@mui/icons-material/Lock";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import style from "../../../../style.module.css";
+import style from "../signin.module.css";
 
 const signupSchema = object({
   taiKhoan: string().required("Tài khoản không được để trống"),

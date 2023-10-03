@@ -10,8 +10,8 @@ export default function Showtimes({ movieId }) {
     queryFn: () => getMovieShowTime(movieId),
     enabled: !!movieId,
   });
+  console.log(data);
   const cinemaSystems = data?.heThongRapChieu || [];
-
   const handleGetCinemaSystem = (cinemaSystemsId) => {
     const found = cinemaSystems.find(
       (item) => item.maHeThongRap === cinemaSystemsId
