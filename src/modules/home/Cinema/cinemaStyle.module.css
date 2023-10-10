@@ -1,0 +1,66 @@
+.container {
+  height: 720px;
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  max-height: 720px;
+  margin-bottom: 40px;
+  background-color: #fff;
+}
+.tabs {
+  width: 90px;
+  border: 1px solid #e0e0e0;
+  position: relative;
+}
+.cinemaByIdList {
+  width: 264px;
+  border: 1px solid #e0e0e0;
+  border-left: none;
+}
+/* .cinemaLogoTab {
+  padding: 20px;
+  min-width: unset;
+  position: relative;
+} */
+
+.cinemaLogoTab:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 80%;
+  height: 1px;
+  bottom: 0;
+  background: rgba(238, 238, 238, 0.88);
+}
+.cinemaLogoAvatar {
+  width: 50px;
+  height: 50px;
+}
+.cinemaTenCumRap {
+  color: #108f3e;
+  display: -webkit-box;
+  overflow: hidden;
+  font-weight: 500;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.cinemaDiaChi {
+  color: #757575;
+  display: -webkit-box;
+  overflow: hidden;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.indicatorTabs {
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background-color: #00ac4d;
+}
+.cinemaListTab {
+  padding: 0;
+}

@@ -14,12 +14,14 @@ import {
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import getVideoId from "../Showing/videoUltils";
+import dayjs from "dayjs";
 import style from "./bannerStyle.module.css";
 
 import "swiper/css";
 import "swiper/css/navigation";
 
-export default function Banner({ movieId }) {
+export default function Banner() {
   const {
     data: banners = [],
     isLoading,
@@ -31,32 +33,47 @@ export default function Banner({ movieId }) {
     queryFn: getMovies,
   });
 
-  const { data: movieShowTimes } = useQuery({
-    queryKey: ["movieShowTime", movieId],
-    queryFn: () => getMovieShowTime(movieId),
-    enabled: !!movieId,
-  });
-  const cinemaSystems = movieShowTimes?.heThongRapChieu || [];
-
   const [selectedMovie, setSelectedMovie] = useState("");
+  const { data: movieShowTimes } = useQuery({
+    queryKey: ["movieShowTime", selectedMovie],
+    queryFn: () => getMovieShowTime(selectedMovie),
+    enabled: !!selectedMovie,
+  });
+
+  const cinemaSystem = movieShowTimes?.heThongRapChieu || [];
   const [selectedCinema, setSelectedCinema] = useState("");
   const [selectedShowtime, setSelectedShowtime] = useState("");
+  // Validate check input
+  const [isMovieSelected, setIsMovieSelected] = useState(false);
+  const [isCinemaSelected, setIsCinemaSelected] = useState(false);
+  const [isShowtimeSelected, setIsShowtimeSelected] = useState(false);
 
   const handleChangeMovie = (event) => {
     setSelectedMovie(event.target.value);
     setSelectedCinema("");
     setSelectedShowtime("");
+    setIsMovieSelected(true);
+    setIsCinemaSelected(false);
+    setIsShowtimeSelected(false);
   };
 
   const handleChangeCinema = (event) => {
     setSelectedCinema(event.target.value);
     setSelectedShowtime("");
+    setIsCinemaSelected(true);
+    setIsShowtimeSelected(false);
   };
 
   const handleChangeShowtime = (event) => {
     setSelectedShowtime(event.target.value);
+    setIsShowtimeSelected(true);
   };
-
+  const handleBuyTicket = () => {
+    if (!isMovieSelected || !isCinemaSelected || !isShowtimeSelected) {
+      alert("Vui lòng chọn đầy đủ thông tin.");
+      return;
+    }
+  };
   if (isLoading) {
     return (
       <div>
@@ -69,10 +86,7 @@ export default function Banner({ movieId }) {
       </div>
     );
   }
-  console.log("Selected Movie:", selectedMovie);
-  console.log("Cinema Systems:", cinemaSystems);
-  console.log("Selected Cinema:", selectedCinema);
-  console.log("Selected Showtime:", selectedShowtime);
+
   return (
     <div className={style.banner}>
       <Swiper
@@ -126,11 +140,13 @@ export default function Banner({ movieId }) {
                   onChange={handleChangeMovie}
                   label="Phim"
                 >
-                  {movies.map((movie) => (
-                    <MenuItem key={movie.maPhim} value={movie.maPhim}>
-                      {movie.tenPhim}
-                    </MenuItem>
-                  ))}
+                  {movies
+                    .filter((movie) => movie.sapChieu === true)
+                    .map((movie) => (
+                      <MenuItem key={movie.maPhim} value={movie.maPhim}>
+                        {movie.tenPhim}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </div>
@@ -145,13 +161,21 @@ export default function Banner({ movieId }) {
                   label="Rạp"
                 >
                   {selectedMovie &&
-                    cinemaSystems
-                      .find((rap) => rap.maPhim === selectedMovie)
-                      ?.cumRapChieu.map((cumRap) => (
-                        <MenuItem key={cumRap.maCumRap} value={cumRap.maCumRap}>
-                          {cumRap.tenCumRap}
+                    cinemaSystem.map((cinema) =>
+                      cinema.cumRapChieu ? (
+                        cinema.cumRapChieu.map((rap) => (
+                          <MenuItem key={rap.maCumRap} value={rap.maCumRap}>
+                            <p>
+                              {rap.tenCumRap} - {rap.diaChi}
+                            </p>
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem disabled>
+                          <p>Phim chưa có lịch chiếu</p>
                         </MenuItem>
-                      ))}
+                      )
+                    )}
                 </Select>
               </FormControl>
             </div>
@@ -163,29 +187,65 @@ export default function Banner({ movieId }) {
                 <Select
                   value={selectedShowtime}
                   onChange={handleChangeShowtime}
-                  label="Ngày & Giờ"
+                  label="Ngày và Giờ"
                 >
-                  {selectedCinema &&
-                    cinemaSystems
-                      .find((rap) => rap.maHeThongRap === selectedMovie)
-                      ?.cumRapChieu.find(
-                        (cumRap) => cumRap.maCumRap === selectedCinema
-                      )
-                      ?.lichChieuPhim.map((lichChieu) => (
-                        <MenuItem
-                          key={lichChieu.maLichChieu}
-                          value={lichChieu.maLichChieu}
-                        >
-                          {lichChieu.ngayChieuGioChieu}
+                  {/* {cinemaSystem[selectedCinema]?.cumRapChieu ? (
+                    cinemaSystem[selectedCinema].cumRapChieu.map((cumRap) =>
+                      cumRap.lichChieuPhim ? (
+                        cumRap.lichChieuPhim.map((lichChieu) => (
+                          <MenuItem
+                            key={lichChieu.maLichChieu}
+                            value={lichChieu.maLichChieu}
+                          >
+                            <p>{lichChieu.ngayChieuGioChieu}</p>
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem disabled>
+                          Không có lịch chiếu cho rạp này
                         </MenuItem>
-                      ))}
+                      )
+                    )
+                  ) : (
+                    <MenuItem disabled>
+                      Không có rạp chiếu cho phim này
+                    </MenuItem>
+                  )} */}
+                  {selectedCinema &&
+                    cinemaSystem.map((heThongRap) =>
+                      heThongRap.cumRapChieu.map((cumRap) =>
+                        cumRap.lichChieuPhim ? (
+                          cumRap.lichChieuPhim.map((lichChieu) => {
+                            const time = dayjs(
+                              lichChieu.ngayChieuGioChieu
+                            ).format("DD-MM-YYYY ~ HH:mm");
+                            return (
+                              <MenuItem
+                                key={lichChieu.maLichChieu}
+                                value={lichChieu.maLichChieu}
+                              >
+                                <p>{time}</p>
+                              </MenuItem>
+                            );
+                          })
+                        ) : (
+                          <MenuItem disabled>
+                            <p>Rạp chưa có lịch chiếu</p>
+                          </MenuItem>
+                        )
+                      )
+                    )}
                 </Select>
               </FormControl>
             </div>
           </Grid>
           <Grid item xs={2}>
             <FormControl className={style.dropDown1}>
-              <Button variant="contained" className={style.btnForm}>
+              <Button
+                variant="contained"
+                className={style.btnForm}
+                onClick={handleBuyTicket}
+              >
                 Mua vé ngay
               </Button>
             </FormControl>
