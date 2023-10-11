@@ -78,13 +78,17 @@ export default function Cinema() {
     queryFn: () => getInformtionSystemCinema(selectedCine),
     enabled: !!selectedCine,
   });
+  const [selectedSystemId, setSelectedSystemId] = useState(null);
   const handleChangeSystemCinema = (event, newValue) => {
     const selectedSystem = systemCine[newValue];
-    console.log("selectedSystem", selectedSystem);
+    // console.log("selectedSystem", selectedSystem);
     if (selectedSystem) {
       setSelectedCine(selectedSystem.maHeThongRap || "");
+      setSelectedSystemId(selectedSystem?.maHeThongRap);
     }
   };
+  console.log("selectedSystemId:", selectedSystemId);
+
   const [selectedRap, setSelectedRap] = useState("");
   const { data: lichChieu = [] } = useQuery({
     queryKey: ["lichChieu", selectedRap],
@@ -102,8 +106,8 @@ export default function Cinema() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  console.log("systemCine", systemCine);
-  console.log("inforSysCine", inforSysCine);
+  // console.log("systemCine", systemCine);
+  // console.log("inforSysCine", inforSysCine);
   return (
     <div>
       <Container maxWidth="md" className={style.container}>
@@ -126,7 +130,7 @@ export default function Cinema() {
               borderRight: 1,
               borderColor: "divider",
               "& .MuiTabs-indicator": {
-                backgroundColor: "#00ac4d", // Thay đổi màu sắc tại đây
+                backgroundColor: "#00ac4d",
               },
             }}
           >
@@ -145,45 +149,54 @@ export default function Cinema() {
                     className={style.cinemaLogoAvatar}
                   />
                 }
-                {...a11yProps(index)}
+                {...a11yProps(selectedSystemId, index)}
                 key={system.maHeThongRap}
                 onClick={(event) => handleChangeSystemCinema(event, index)}
               />
             ))}
           </Tabs>
-          {inforSysCine.map((info, index) => {
-            console.log("value:", value);
-            console.log("index:", index);
-            console.log("Tên:", info.tenCumRap);
-            return (
-              <TabPanel
-                key={info.maCumRap}
-                value={value}
-                index={index}
-                className={style.cinemaByIdList}
-                style={{ padding: "0px" }}
-                indicatorColor="#00ac4d"
-              >
-                <div>
-                  <Button
-                    style={{
-                      position: "relative",
-                      textAlign: "left",
-                      padding: "18px",
-                    }}
-                    onClick={(event) => handleChangeRap(event, index)}
+          <TabPanel value={value} index={selectedSystemId}>
+            <Tabs
+              orientation="vertical"
+              variant="standard"
+              value={value}
+              onChange={handleChange}
+              className={style.cinemaByIdList}
+              aria-label="Vertical tabs example"
+            >
+              {inforSysCine.map((info, index) => {
+                console.log("value:", value);
+                console.log("index:", index);
+                console.log("Tên:", info.tenCumRap);
+                return (
+                  <TabPanel
+                    key={info.maCumRap}
+                    index={index}
+                    value={value}
+                    // style={{ padding: "0px" }}
+                    indicatorColor="#00ac4d"
                   >
-                    <div className={style.cinemaLogoTab}>
-                      <h5 className={style.cinemaTenCumRap}>
-                        {info.tenCumRap}
-                      </h5>
-                      <h6 className={style.cinemaDiaChi}>{info.diaChi}</h6>
-                    </div>
-                  </Button>
-                </div>
-              </TabPanel>
-            );
-          })}
+                    <Button
+                      style={{
+                        position: "relative",
+                        textAlign: "left",
+                        padding: "18px",
+                      }}
+                      onClick={(event) => handleChangeRap(event, index)}
+                    >
+                      <div className={style.cinemaLogoTab}>
+                        <h5 className={style.cinemaTenCumRap}>
+                          {info.tenCumRap}
+                        </h5>
+                        <h6 className={style.cinemaDiaChi}>{info.diaChi}</h6>
+                      </div>
+                    </Button>
+                  </TabPanel>
+                );
+              })}
+            </Tabs>
+          </TabPanel>
+
           {lichChieu.map((lich, index) => {
             // console.log(lich);
             return (
