@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Container,
@@ -17,6 +17,7 @@ import {
   getSystemCinema,
 } from "../../../apis/cinemaAPI";
 import style from "./cinemaStyle.module.css";
+import dayjs from "dayjs";
 
 // --------------------------------------------------------------------
 function TabPanel(props) {
@@ -68,6 +69,8 @@ function a11yProps(index) {
 }
 // ------------------------------------------------------------
 export default function Cinema() {
+  const [lichChieuTheoCum, setLichChieuTheoCum] = useState([]);
+
   const { data: systemCine = [] } = useQuery({
     queryKey: ["systemCinema"],
     queryFn: getSystemCinema,
@@ -80,15 +83,8 @@ export default function Cinema() {
   });
 
   const handleChangeSystemCinema = (newValue) => {
-    // const selectedSystem = systemCine[newValue];
-    // console.log("selectedSystem", selectedSystem);
-    // if (selectedSystem) {
-    //   setSelectedCine(selectedSystem.maHeThongRap || "");
-    //   setSelectedSystemId(selectedSystem?.maHeThongRap);
-    // }
     setSelectedCine(newValue);
   };
-  // console.log("selectedSystemId:", selectedSystemId);
 
   const [selectedRap, setSelectedRap] = useState([]);
   const { data: lichChieu } = useQuery({
@@ -96,13 +92,14 @@ export default function Cinema() {
     queryFn: () => getLichChieu(selectedCine),
     enabled: !!selectedCine,
   });
-  console.log("lichChieu:", lichChieu);
-  const lichChieuTheoCum = lichChieu?.lstCumRap || [];
 
-  console.log("lichChieuTheoCum:", lichChieuTheoCum);
   const handleChangeRap = (cumRapId) => {
-    setSelectedRap(cumRapId);
     console.log("cumRapId:", cumRapId);
+    const found = lichChieu[0].lstCumRap.filter(
+      (item) => item.maCumRap == cumRapId
+    );
+    console.log("found:", found);
+    setLichChieuTheoCum(found);
   };
 
   const [value, setValue] = useState(0);
@@ -115,10 +112,20 @@ export default function Cinema() {
   const handleChange2 = (event, value) => {
     setValue2(value);
   };
-
-  // console.log("systemCine", systemCine);
-  // console.log("inforSysCine", inforSysCine);
-  console.log("selectedRap:", selectedRap);
+  useEffect(() => {
+    // Kiểm tra xem có hệ thống rạp nào hay không
+    if (systemCine.length > 0) {
+      const firstSystem = systemCine[0];
+      handleChangeSystemCinema(firstSystem.maHeThongRap);
+    }
+  }, [systemCine]);
+  useEffect(() => {
+    // Kiểm tra xem có thông tin cụm rạp nào hay không
+    if (inforSysCine.length > 0) {
+      const firstCumRap = inforSysCine[0];
+      handleChangeRap(firstCumRap.maCumRap);
+    }
+  }, [inforSysCine]);
   return (
     <div id="cinema">
       <Container
@@ -219,21 +226,56 @@ export default function Cinema() {
               </Tabs>
             </TabPanel>
           ))}
-          {lichChieuTheoCum.map((cumRap) => (
+          {inforSysCine.map((info, index) => (
             <TabPanel
               value={value2}
-              index={lichChieuTheoCum.indexOf(cumRap)}
-              key={cumRap.maCumRap}
+              index={index}
+              className={style.cinemaTabPannel}
+              indicatorColor="#fff"
             >
-              {cumRap.danhSachPhim.map((phim) => {
-                console.log(phim.tenPhim);
-                return (
-                  <div key={phim.maPhim}>
-                    <h3>{phim.tenPhim}</h3>
-                    {/* Các thông tin phim khác */}
-                  </div>
-                );
-              })}
+              {lichChieuTheoCum.map((cumRap, index) => (
+                <Box sx={{ width: "100%" }} key={cumRap.maCumRap}>
+                  {cumRap.danhSachPhim
+                    .filter((phim) => phim.dangChieu)
+                    .map((phim) => (
+                      <div key={phim.maPhim} className={style.movieSingle}>
+                        <img
+                          src={phim.hinhAnh}
+                          alt=""
+                          width="100px"
+                          height="126px"
+                        />
+                        <div className={style.phimInfo}>
+                          <h2 className={style.tenPhim}>
+                            <span className={style.limitAge}>C18</span>
+                            {phim.tenPhim}
+                          </h2>
+                          <div className={style.ngayGioChieuContainer}>
+                            {phim.lstLichChieuTheoPhim
+                              .slice(0, 4)
+                              .map((lichChieu) => {
+                                const date = new Date(
+                                  lichChieu.ngayChieuGioChieu
+                                );
+                                const formattedDate = dayjs(
+                                  lichChieu.ngayChieuGioChieu
+                                ).format("DD-MM-YYYY ~ HH:mm");
+                                return (
+                                  <div key={lichChieu.maLichChieu}>
+                                    <button
+                                      className={style.ngayGioChieuButton}
+                                    >
+                                      {formattedDate}
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </Box>
+              ))}
             </TabPanel>
           ))}
         </Box>

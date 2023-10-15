@@ -20,9 +20,11 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import style from "./showingStyle.module.css";
 
 const chunkArray = (array, size) =>
-  Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
-    array.slice(index * size, (index + 1) * size)
-  );
+  array.length
+    ? Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
+        array.slice(index * size, (index + 1) * size)
+      )
+    : [];
 
 export default function Showing() {
   const { data = [], isLoading } = useQuery({

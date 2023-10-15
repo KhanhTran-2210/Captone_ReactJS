@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Grid,
   List,
@@ -10,7 +11,9 @@ import {
 
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
+import { Link, Outlet } from "react-router-dom";
 import style from "./adminStyle.module.css";
+
 export default function AdminMovie() {
   const [openUser, setOpenUser] = useState(true);
 
@@ -22,6 +25,7 @@ export default function AdminMovie() {
   const handleClickMovie = () => {
     setOpenMovie(!openMovie);
   };
+
   return (
     <div>
       <Grid container>
@@ -49,10 +53,14 @@ export default function AdminMovie() {
             <Collapse in={openUser} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Danh sách user" />
+                  <Link to="users-list">
+                    <ListItemText primary="Danh sách user" />
+                  </Link>
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Thêm user" />
+                  <Link to="user-add">
+                    <ListItemText primary="Thêm user" />
+                  </Link>
                 </ListItemButton>
               </List>
             </Collapse>
@@ -67,24 +75,29 @@ export default function AdminMovie() {
             <Collapse in={openMovie} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Danh sách movie" />
+                  <Link to="movie-list">
+                    <ListItemText primary="Danh sách movie" />
+                  </Link>
                 </ListItemButton>
                 <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText primary="Thêm movie" />
+                  <Link to="movie-add">
+                    <ListItemText primary="Thêm movie" />
+                  </Link>
                 </ListItemButton>
               </List>
             </Collapse>
           </List>
         </Grid>
         <Grid item xs={8}>
-          <div className={style.adminWelcome}>
+          {/* <div className={style.adminWelcome}>
             <img
               src="./img/animation_lnovjcw6_small.gif"
               alt=""
               width="300px"
             />
             <h1>Welcome Admin</h1>
-          </div>
+          </div> */}
+          <Outlet />
         </Grid>
       </Grid>
     </div>

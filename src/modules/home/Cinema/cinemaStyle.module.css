@@ -66,3 +66,59 @@
 .cinemaListTab {
   padding: 0;
 }
+.movieSingle {
+  display: flex;
+  padding: 20px;
+  position: relative;
+}
+.movieSingle::after {
+  width: 80%;
+  bottom: 0;
+  height: 1px;
+  content: "";
+  display: block;
+  position: absolute;
+  background: rgba(238, 238, 238, 0.88);
+}
+.phimInfo {
+  width: 555px;
+  padding: 0 20px;
+}
+.limitAge {
+  color: #fff;
+  display: inline-block;
+  padding: 0 5px;
+  font-size: 16px;
+  min-width: 33px;
+  background: #fb4226;
+  text-align: center;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+.tenPhim {
+  line-height: 22px;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+.cinemaTabPannel {
+  width: 570px;
+  border: 1px solid #e0e0e0;
+  flex-grow: 1;
+  overflow-y: scroll;
+  border-left: none;
+}
+.ngayGioChieuContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ngayGioChieuButton {
+  color: #fff;
+  background-color: #108f3e;
+  border-radius: 5px;
+  margin: 3px;
+  border: none;
+  transition: all 0.5s;
+}
+.ngayGioChieuButton:hover {
+  background-color: #10e75f;
+}

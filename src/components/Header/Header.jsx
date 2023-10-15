@@ -14,7 +14,7 @@ export default function Header() {
   };
   return (
     <div id="home">
-      <AppBar position="static" color="white">
+      <AppBar position="fixed" color="white">
         <Toolbar>
           <Grid container>
             <Grid item xs={4}>
