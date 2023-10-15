@@ -8,6 +8,8 @@ import Signup from "./modules/Auth/pages/Signup";
 import UserProvider from "./contexts/UserContext/UserContext";
 import ProtectedRout from "./routers/ProtectedRout";
 import AdminMovie from "./modules/AdminMovie";
+import MovieList from "./modules/AdminMovie/Movies/MovieList/MovieList";
+import UserList from "./modules/AdminMovie/Users/UserList/UserList";
 
 function App() {
   return (
@@ -37,9 +39,9 @@ function App() {
 
           {/* Admin */}
           {/* <Route element={<AdminProtectedRoute />}> */}
-          <Route path="/admin">
-            <Route path="movies" element={<AdminMovie />} />
-            {/* <Route path="users" element={<AdminUser />} /> */}
+          <Route path="/admin" element={<AdminMovie />}>
+            <Route path="movies" element={<MovieList />} />
+            <Route path="users" element={<UserList />} />
             {/* <Route path="tickets" element={<AdminTicket />} /> */}
           </Route>
           {/* </Route> */}

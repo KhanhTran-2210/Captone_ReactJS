@@ -78,39 +78,54 @@ export default function Cinema() {
     queryFn: () => getInformtionSystemCinema(selectedCine),
     enabled: !!selectedCine,
   });
-  const [selectedSystemId, setSelectedSystemId] = useState(null);
-  const handleChangeSystemCinema = (event, newValue) => {
-    const selectedSystem = systemCine[newValue];
+
+  const handleChangeSystemCinema = (newValue) => {
+    // const selectedSystem = systemCine[newValue];
     // console.log("selectedSystem", selectedSystem);
-    if (selectedSystem) {
-      setSelectedCine(selectedSystem.maHeThongRap || "");
-      setSelectedSystemId(selectedSystem?.maHeThongRap);
-    }
+    // if (selectedSystem) {
+    //   setSelectedCine(selectedSystem.maHeThongRap || "");
+    //   setSelectedSystemId(selectedSystem?.maHeThongRap);
+    // }
+    setSelectedCine(newValue);
   };
-  console.log("selectedSystemId:", selectedSystemId);
+  // console.log("selectedSystemId:", selectedSystemId);
 
-  const [selectedRap, setSelectedRap] = useState("");
-  const { data: lichChieu = [] } = useQuery({
-    queryKey: ["lichChieu", selectedRap],
-    queryFn: () => getLichChieu(selectedRap),
-    enabled: !!selectedRap,
+  const [selectedRap, setSelectedRap] = useState([]);
+  const { data: lichChieu } = useQuery({
+    queryKey: ["lichChieu", selectedCine],
+    queryFn: () => getLichChieu(selectedCine),
+    enabled: !!selectedCine,
   });
+  console.log("lichChieu:", lichChieu);
+  const lichChieuTheoCum = lichChieu?.lstCumRap || [];
 
-  const handleChangeRap = (event, newValue) => {
-    const selectedInfo = inforSysCine[newValue];
-    if (selectedInfo) {
-      setSelectedRap(selectedInfo.lstCumRap || "");
-    }
+  console.log("lichChieuTheoCum:", lichChieuTheoCum);
+  const handleChangeRap = (cumRapId) => {
+    setSelectedRap(cumRapId);
+    console.log("cumRapId:", cumRapId);
   };
+
   const [value, setValue] = useState(0);
+  const [value2, setValue2] = useState(0);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleChange2 = (event, value) => {
+    setValue2(value);
+  };
+
   // console.log("systemCine", systemCine);
   // console.log("inforSysCine", inforSysCine);
+  console.log("selectedRap:", selectedRap);
   return (
-    <div>
-      <Container maxWidth="md" className={style.container}>
+    <div id="cinema">
+      <Container
+        maxWidth="md"
+        className={style.container}
+        style={{ marginTop: "200px" }}
+      >
         <Box
           sx={{
             flexGrow: 1,
@@ -134,80 +149,93 @@ export default function Cinema() {
               },
             }}
           >
-            {systemCine.map((system, index) => (
-              <Tab
-                className={style.cinemaLogoTab}
-                style={{
-                  padding: "30px",
-                  minWidth: "unset",
-                  position: "relative",
-                }}
-                icon={
-                  <Avatar
-                    alt={system.biDanh}
-                    src={system.logo}
-                    className={style.cinemaLogoAvatar}
-                  />
-                }
-                {...a11yProps(selectedSystemId, index)}
-                key={system.maHeThongRap}
-                onClick={(event) => handleChangeSystemCinema(event, index)}
-              />
-            ))}
+            {systemCine.map((system, index) => {
+              return (
+                <Tab
+                  className={style.cinemaLogoTab}
+                  style={{
+                    padding: "30px",
+                    minWidth: "unset",
+                    position: "relative",
+                  }}
+                  icon={
+                    <Avatar
+                      alt={system.biDanh}
+                      src={system.logo}
+                      className={style.cinemaLogoAvatar}
+                    />
+                  }
+                  {...a11yProps(index)}
+                  key={system.maHeThongRap}
+                  onClick={() => handleChangeSystemCinema(system.maHeThongRap)}
+                />
+              );
+            })}
           </Tabs>
-          <TabPanel value={value} index={selectedSystemId}>
-            <Tabs
-              orientation="vertical"
-              variant="standard"
-              value={value}
-              onChange={handleChange}
+
+          {systemCine.map((item, index) => (
+            <TabPanel
               className={style.cinemaByIdList}
-              aria-label="Vertical tabs example"
+              value={value}
+              index={index}
+              indicatorColor="#cccccc"
             >
-              {inforSysCine.map((info, index) => {
-                console.log("value:", value);
-                console.log("index:", index);
-                console.log("Tên:", info.tenCumRap);
+              <Tabs
+                orientation="vertical"
+                variant="scrollable"
+                aria-label="Vertical tabs example"
+                value={value2}
+                onChange={handleChange2}
+                sx={{
+                  borderRight: 1,
+                  borderColor: "divider",
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "#00ac4d",
+                  },
+                }}
+              >
+                {inforSysCine.map((info, index) => (
+                  <Tab
+                    label={
+                      <Button
+                        style={{
+                          position: "relative",
+                          textAlign: "left",
+                          height: "90px",
+                        }}
+                        onClick={() => handleChangeRap(info.maCumRap)}
+                      >
+                        <div className={style.cinemaLogoTab}>
+                          <h5 className={style.cinemaTenCumRap}>
+                            {info.tenCumRap}
+                          </h5>
+                          <h6 className={style.cinemaDiaChi}>{info.diaChi}</h6>
+                        </div>
+                      </Button>
+                    }
+                    {...a11yProps(index)}
+                  ></Tab>
+                ))}
+              </Tabs>
+            </TabPanel>
+          ))}
+          {lichChieuTheoCum.map((cumRap) => (
+            <TabPanel
+              value={value2}
+              index={lichChieuTheoCum.indexOf(cumRap)}
+              key={cumRap.maCumRap}
+            >
+              {cumRap.danhSachPhim.map((phim) => {
+                console.log(phim.tenPhim);
                 return (
-                  <TabPanel
-                    key={info.maCumRap}
-                    index={index}
-                    value={value}
-                    // style={{ padding: "0px" }}
-                    indicatorColor="#00ac4d"
-                  >
-                    <Button
-                      style={{
-                        position: "relative",
-                        textAlign: "left",
-                        padding: "18px",
-                      }}
-                      onClick={(event) => handleChangeRap(event, index)}
-                    >
-                      <div className={style.cinemaLogoTab}>
-                        <h5 className={style.cinemaTenCumRap}>
-                          {info.tenCumRap}
-                        </h5>
-                        <h6 className={style.cinemaDiaChi}>{info.diaChi}</h6>
-                      </div>
-                    </Button>
-                  </TabPanel>
+                  <div key={phim.maPhim}>
+                    <h3>{phim.tenPhim}</h3>
+                    {/* Các thông tin phim khác */}
+                  </div>
                 );
               })}
-            </Tabs>
-          </TabPanel>
-
-          {lichChieu.map((lich, index) => {
-            // console.log(lich);
-            return (
-              <Box>
-                <div key={lich.maLichChieu} value={value} index={index}>
-                  <img src={lich.hinhAnh} alt={lich.tenPhim} />
-                </div>
-              </Box>
-            );
-          })}
-          <TabPanel></TabPanel>
+            </TabPanel>
+          ))}
         </Box>
       </Container>
     </div>

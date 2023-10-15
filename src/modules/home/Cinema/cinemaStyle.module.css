@@ -13,9 +13,11 @@
   position: relative;
 }
 .cinemaByIdList {
-  width: 264px;
+  width: 280px;
+
   border: 1px solid #e0e0e0;
   border-left: none;
+  overflow-y: scroll;
 }
 /* .cinemaLogoTab {
   padding: 20px;
@@ -27,7 +29,7 @@
   content: "";
   display: block;
   position: absolute;
-  width: 80%;
+  width: 90%;
   height: 1px;
   bottom: 0;
   background: rgba(238, 238, 238, 0.88);

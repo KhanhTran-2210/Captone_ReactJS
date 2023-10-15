@@ -1,12 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 export default function NotFound() {
   const navigate = useNavigate();
   return (
     <div>
-      <h1>Not Found</h1>
-      <button onClick={() => navigate("/")}>Go to Home</button>
+      <Container>
+        <img
+          src="./img/animation_lnncfyxb_small.gif"
+          alt="404"
+          width="100%"
+          height="500px"
+        />
+      </Container>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import logos from "./logo.json";
 import style from "./footerStyle.module.css";
 export default function Footer() {
   return (
-    <div>
+    <div id="footer">
       <div className={style.bgFooter}>
         <Container maxWidth="md">
           <Grid container spacing={4}>

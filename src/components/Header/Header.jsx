@@ -8,8 +8,12 @@ import style from "./headerStyle.module.css";
 
 export default function Header() {
   const { currentUser, handleSignout } = useUserContext();
+  const handleScroll = (id) => {
+    const element = document.getElementById(id);
+    element.scrollIntoView({ behavior: "smooth" });
+  };
   return (
-    <div>
+    <div id="home">
       <AppBar position="static" color="white">
         <Toolbar>
           <Grid container>
@@ -19,10 +23,18 @@ export default function Header() {
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <Button color="inherit">Trang Chủ</Button>
-              <Button color="inherit">Sản Phẩm</Button>
-              <Button color="inherit">Dịch Vụ</Button>
-              <Button color="inherit">Liên Hệ</Button>
+              <Button onClick={() => handleScroll("home")} color="inherit">
+                Trang Chủ
+              </Button>
+              <Button onClick={() => handleScroll("showing")} color="inherit">
+                Lịch Chiếu
+              </Button>
+              <Button onClick={() => handleScroll("cinema")} color="inherit">
+                Cụm Rạp
+              </Button>
+              <Button onClick={() => handleScroll("footer")} color="inherit">
+                Ứng Dụng
+              </Button>
             </Grid>
             <Grid item xs={4}>
               <div style={{ display: "flex", justifyContent: "flex-end" }}>

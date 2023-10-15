@@ -12,6 +12,7 @@ export default function Showtimes({ movieId }) {
   });
   console.log(data);
   const cinemaSystems = data?.heThongRapChieu || [];
+  console.log("cinemaSystems:", cinemaSystems);
   const handleGetCinemaSystem = (cinemaSystemsId) => {
     const found = cinemaSystems.find(
       (item) => item.maHeThongRap === cinemaSystemsId

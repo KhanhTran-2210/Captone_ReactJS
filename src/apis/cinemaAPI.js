@@ -46,7 +46,7 @@ export async function getLichChieu(systemId) {
       {
         params: {
           maHeThongRap: systemId,
-          maNhom: "GP03",
+          maNhom: "GP01",
         },
       }
     );
