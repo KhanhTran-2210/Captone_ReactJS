@@ -8,6 +8,7 @@ import Signup from "./modules/Auth/pages/Signup";
 import UserProvider from "./contexts/UserContext/UserContext";
 import ProtectedRout from "./routers/ProtectedRout";
 import AdminMovie from "./modules/AdminMovie";
+import TicketMovie from "./modules/TicketMovie/TicketMovie";
 
 function App() {
   return (
@@ -26,10 +27,7 @@ function App() {
               }
             /> */}
             <Route element={<ProtectedRout />}>
-              <Route
-                path="tickets/:showtimeId"
-                element={<div>Tiket page</div>}
-              />
+              <Route path="tickets/:showtimeId" element={<TicketMovie />} />
             </Route>
             <Route path="/sign-in" element={<Signin />} />
             <Route path="/sign-up" element={<Signup />} />
