@@ -9,6 +9,10 @@ import UserProvider from "./contexts/UserContext/UserContext";
 import ProtectedRout from "./routers/ProtectedRout";
 import AdminMovie from "./modules/AdminMovie";
 import TicketMovie from "./modules/TicketMovie/TicketMovie";
+import MovieList from "./modules/AdminMovie/Movies/MovieList/MovieList";
+import UserList from "./modules/AdminMovie/Users/UserList/UserList";
+import AddMovie from "./modules/AdminMovie/Movies/AddMovie/AddMovie";
+import AddUser from "./modules/AdminMovie/Users/AddUser/AddUser";
 
 function App() {
   return (
@@ -35,9 +39,11 @@ function App() {
 
           {/* Admin */}
           {/* <Route element={<AdminProtectedRoute />}> */}
-          <Route path="/admin">
-            <Route path="movies" element={<AdminMovie />} />
-            {/* <Route path="users" element={<AdminUser />} /> */}
+          <Route path="/admin" element={<AdminMovie />}>
+            <Route path="movie-list" element={<MovieList />} />
+            <Route path="users-list" element={<UserList />} />
+            <Route path="movie-add" element={<AddMovie />} />
+            <Route path="user-add" element={<AddUser />} />
             {/* <Route path="tickets" element={<AdminTicket />} /> */}
           </Route>
           {/* </Route> */}
