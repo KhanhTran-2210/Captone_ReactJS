@@ -7,7 +7,6 @@ export async function getTicketMovieBox(showtimeId) {
         MaLichChieu: showtimeId,
       },
     });
-    console.log(response);
     return response?.data?.content;
   } catch (error) {
     throw error.response?.data?.content;

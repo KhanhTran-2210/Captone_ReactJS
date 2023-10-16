@@ -92,13 +92,11 @@ export default function Cinema() {
     queryFn: () => getLichChieu(selectedCine),
     enabled: !!selectedCine,
   });
-
+  console.log(lichChieu);
   const handleChangeRap = (cumRapId) => {
-    console.log("cumRapId:", cumRapId);
     const found = lichChieu[0].lstCumRap.filter(
       (item) => item.maCumRap == cumRapId
     );
-    console.log("found:", found);
     setLichChieuTheoCum(found);
   };
 

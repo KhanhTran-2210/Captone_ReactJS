@@ -22,12 +22,12 @@ export default function MovieProfile({ movieId }) {
 
   const handleClose = () => setOpen(false);
 
-  const handleOpen = (linkDemo) => {
-    if (!linkDemo) {
+  const handleOpen = (movieTrailer) => {
+    if (!movieTrailer) {
       alert("link không dúng!");
     }
     setOpen(true);
-    setTrailer(linkDemo);
+    setTrailer(movieTrailer);
   };
 
   const { data: movieProfile = [] } = useQuery({
@@ -43,7 +43,7 @@ export default function MovieProfile({ movieId }) {
           <Grid item xs={6}>
             <img
               src={movieProfile.hinhAnh}
-              height={600}
+              height={800}
               width="100%"
               alt={movieProfile.tenPhim}
               style={{ borderRadius: "10px" }}

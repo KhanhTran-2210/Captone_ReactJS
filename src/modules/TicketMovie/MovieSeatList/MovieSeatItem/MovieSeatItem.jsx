@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ButtonSeatMovie } from "../styledMovieList";
 
 export default function MovieSeatItem({
@@ -7,9 +7,6 @@ export default function MovieSeatItem({
   isSelected,
   isLoading,
 }) {
-  // const [isSelected, setIsSelected] = useState(false);
-  // const [selectedSeat, handleSelect] = useTicketContext();
-
   let bg = "";
   if (seat.daDat) {
     bg = "#404040";
@@ -27,7 +24,6 @@ export default function MovieSeatItem({
       evt={seat.daDat ? "none" : ""}
       disabled={seat.daDat || isLoading}
       onClick={() => {
-        // setIsSelected(!isSelected)
         handleSelect({ ...seat, isSelected: !isSelected });
       }}
       onTouchEnd={() => {

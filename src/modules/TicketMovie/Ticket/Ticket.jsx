@@ -12,8 +12,7 @@ import { ButtonMovie } from "../../../components/ButtonMovie";
 import MuiAlert from "@mui/material/Alert";
 import { red } from "@mui/material/colors";
 
-export default function Ticket({ infoCinema, data }) {
-  console.log(infoCinema);
+export default function Ticket({ infoCinema }) {
   const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -40,29 +39,32 @@ export default function Ticket({ infoCinema, data }) {
       <MiniCardUl>
         <MiniCardLi br="1px solid #cccc" p="0 10px 0 0">
           <Box display={"flex"} flexDirection={"column"}>
-            <Box sx={{ width: "500px", height: "500px", marginTop: "16px" }}>
+            <Box sx={{ width: "200px", height: "200px", marginTop: "16px" }}>
               <img
-                src={infoCinema}
+                src={infoCinema.hinhAnh}
                 width="100%"
                 height="100%"
-                alt={data?.thongTinPhim.tenPhim}
+                alt={infoCinema.tenPhim}
               />
             </Box>
-            <TextTicket pt="8px">{data?.thongTinPhim.tenPhim}</TextTicket>
+            <TextTicket pt="8px" fs="25px" fw="bold">
+              {infoCinema.tenPhim}
+            </TextTicket>
+          </Box>
+        </MiniCardLi>
+        <MiniCardLi p="0 10px" br="1px solid #cccc">
+          <Box display={"flex"} flexDirection={"column"}>
+            <TextTicket>{infoCinema.tenCumRap}</TextTicket>
+            <TextTicket>{infoCinema.tenRap}</TextTicket>
+            <TextTicket>{infoCinema.ngayChieu}</TextTicket>
+            <TextTicket>{infoCinema.gioChieu}</TextTicket>
+            <TextTicket>{infoCinema.diaChi}</TextTicket>
           </Box>
         </MiniCardLi>
         <MiniCardLi p="0 10px">
           <Box display={"flex"} flexDirection={"column"} position={"relative"}>
-            <Ticket>Thanh toán: </Ticket>
-            <TextTicket color={red}>{totalPrice} VNĐ</TextTicket>
-            <TextTicket>Cụm rạp: </TextTicket>
-            <TextTicket>{data?.thongTinPhim.tenCumRap}</TextTicket>
-            <TextTicket>Địa chỉ: </TextTicket>
-            <TextTicket>{data?.thongTinPhim.diaChi}</TextTicket>
-            <TextTicket>Rạp: </TextTicket>
-            <TextTicket>{data?.thongTinPhim.tenRap}</TextTicket>
-            <TextTicket>Ngày giờ chiếu: </TextTicket>
-            <TextTicket>{data?.thongTinPhim.gioChieu}</TextTicket>
+            <TextTicket>Tạm tính:</TextTicket>
+            <TextTicket>{totalPrice} VNĐ</TextTicket>
             <TextTicket>Ghế bạn chọn:</TextTicket>
             <Box display={"flex"}>
               {selectedSeats.map((item, index) => {
@@ -78,6 +80,7 @@ export default function Ticket({ infoCinema, data }) {
             <ButtonMovie
               onClick={handleClick}
               height="40px"
+              width="200px"
               position="absolute"
               bot="10px"
               left="0"

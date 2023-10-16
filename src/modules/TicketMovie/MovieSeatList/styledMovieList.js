@@ -29,7 +29,7 @@ export const NoteSeat = styled.div`
 `;
 
 export const BackgroundTicket = styled.div`
-  background-color: #000;
+  background-color: #f18720;
 
   max-width: 100%;
   margin: 16px 0;
@@ -65,7 +65,7 @@ export const MiniCardLi = styled.li`
 `;
 
 export const TextTicket = styled.p`
-  color: #cccccc;
+  color: white;
 
   font-size: ${(props) => props.fs};
   font-weight: ${(props) => props.fw};

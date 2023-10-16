@@ -2,11 +2,6 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getMovies } from "../../../apis/movieAPI";
-<<<<<<< HEAD
-import { getMovieShowTimes } from "../../../apis/cinemaAPI";
-=======
-
->>>>>>> ccda5408b38000a4ef0b91d242b81ecc253b7b67
 import getVideoId from "./videoUltils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -35,14 +30,6 @@ export default function Showing() {
     queryKey: ["movies"],
     queryFn: getMovies,
   });
-<<<<<<< HEAD
-  const { data: cinemas } = useQuery({
-    queryKey: ["cinema"],
-    queryFn: getMovieShowTimes,
-  });
-=======
-
->>>>>>> ccda5408b38000a4ef0b91d242b81ecc253b7b67
   const navigate = useNavigate();
   const [urlTrailers, setUrlTrailers] = useState({});
 
