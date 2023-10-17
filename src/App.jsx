@@ -8,6 +8,7 @@ import Signup from "./modules/Auth/pages/Signup";
 import UserProvider from "./contexts/UserContext/UserContext";
 import ProtectedRout from "./routers/ProtectedRout";
 import AdminMovie from "./modules/AdminMovie";
+import TicketMovie from "./modules/TicketMovie/TicketMovie";
 import MovieList from "./modules/AdminMovie/Movies/MovieList/MovieList";
 import UserList from "./modules/AdminMovie/Users/UserList/UserList";
 import AddMovie from "./modules/AdminMovie/Movies/AddMovie/AddMovie";
