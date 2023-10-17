@@ -12,16 +12,20 @@ import MovieList from "./modules/AdminMovie/Movies/MovieList/MovieList";
 import UserList from "./modules/AdminMovie/Users/UserList/UserList";
 import AddMovie from "./modules/AdminMovie/Movies/AddMovie/AddMovie";
 import AddUser from "./modules/AdminMovie/Users/AddUser/AddUser";
+import LoginAdmin from "./modules/Auth/pages/LoginAdmin/LoginAdmin";
+import AdminProtectedRoute from "./routers/AdminProtectedRoute/AdminProtectedRoute";
+import AdminUserProvider from "./contexts/AdminContext/AdminContext";
 
 function App() {
   return (
     <UserProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="/movies/:movieId" element={<Details />} />
-            {/* <Route
+      <AdminUserProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/movies/:movieId" element={<Details />} />
+              {/* <Route
               path="tickets/:showtimeId"
               element={
                 <ProtectedRout>
@@ -29,30 +33,32 @@ function App() {
                 </ProtectedRout>
               }
             /> */}
-            <Route element={<ProtectedRout />}>
-              <Route
-                path="tickets/:showtimeId"
-                element={<div>Tiket page</div>}
-              />
+              <Route element={<ProtectedRout />}>
+                <Route
+                  path="tickets/:showtimeId"
+                  element={<div>Tiket page</div>}
+                />
+              </Route>
+              <Route path="/sign-in" element={<Signin />} />
+              <Route path="/sign-up" element={<Signup />} />
             </Route>
-            <Route path="/sign-in" element={<Signin />} />
-            <Route path="/sign-up" element={<Signup />} />
-          </Route>
 
-          {/* Admin */}
-          {/* <Route element={<AdminProtectedRoute />}> */}
-          <Route path="/admin" element={<AdminMovie />}>
-            <Route path="movie-list" element={<MovieList />} />
-            <Route path="users-list" element={<UserList />} />
-            <Route path="movie-add" element={<AddMovie />} />
-            <Route path="user-add" element={<AddUser />} />
-            {/* <Route path="tickets" element={<AdminTicket />} /> */}
-          </Route>
-          {/* </Route> */}
+            {/* Admin */}
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            <Route element={<AdminProtectedRoute />}>
+              <Route path="/admin" element={<AdminMovie />}>
+                <Route path="movie-list" element={<MovieList />} />
+                <Route path="users-list" element={<UserList />} />
+                <Route path="movie-add" element={<AddMovie />} />
+                <Route path="user-add" element={<AddUser />} />
+              </Route>
+            </Route>
+            <Route path="log-in-admin" element={<LoginAdmin />} />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AdminUserProvider>
     </UserProvider>
   );
 }

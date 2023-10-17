@@ -12,7 +12,11 @@ import {
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link, Outlet } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import style from "./adminStyle.module.css";
+
+import { useAdminUserContext } from "../../contexts/AdminContext/AdminContext";
 
 export default function AdminMovie() {
   const [openUser, setOpenUser] = useState(true);
@@ -25,11 +29,11 @@ export default function AdminMovie() {
   const handleClickMovie = () => {
     setOpenMovie(!openMovie);
   };
-
+  const { adminUser, handleAdminSignout } = useAdminUserContext();
   return (
     <div>
       <Grid container>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <List
             sx={{
               width: "100%",
@@ -86,9 +90,30 @@ export default function AdminMovie() {
                 </ListItemButton>
               </List>
             </Collapse>
+            <div style={{ display: "flex", marginTop: "150px" }}>
+              <span>
+                <div>
+                  <span className={style.header_signin}>
+                    <div>
+                      <span>
+                        <a href="">
+                          <AccountBoxIcon />
+                          {adminUser.hoTen}
+                        </a>{" "}
+                        |
+                        <a href="/log-in-admin" onClick={handleAdminSignout}>
+                          <LogoutIcon />
+                          Đăng xuất
+                        </a>
+                      </span>
+                    </div>
+                  </span>
+                </div>
+              </span>
+            </div>
           </List>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={10}>
           {/* <div className={style.adminWelcome}>
             <img
               src="./img/animation_lnovjcw6_small.gif"

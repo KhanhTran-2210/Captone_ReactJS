@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Typography, Button, Grid } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import style from "./headerStyle.module.css";
 
 export default function Header() {
@@ -46,6 +47,11 @@ export default function Header() {
                           <AccountBoxIcon />
                           {currentUser.hoTen}
                         </a>{" "}
+                        |
+                        <a href="/log-in-admin">
+                          <AdminPanelSettingsIcon />
+                          Quản trị
+                        </a>
                         |
                         <a href="/" onClick={handleSignout}>
                           <LogoutIcon />

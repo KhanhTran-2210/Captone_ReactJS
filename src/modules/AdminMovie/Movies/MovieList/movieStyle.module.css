@@ -1,0 +1,8 @@
+.container {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+.search {
+  margin: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.836);
+}

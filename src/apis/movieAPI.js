@@ -9,11 +9,12 @@ export async function getBanner() {
   }
 }
 
-export async function getMovies() {
+export async function getMovies({ search }) {
   try {
     const response = await fetcher.get("/QuanLyPhim/LayDanhSachPhim", {
       params: {
         maNhom: "GP07",
+        tenPhim: search,
       },
     });
     return response.data.content;
@@ -45,5 +46,19 @@ export async function addMovie(movie) {
     return response.data?.content;
   } catch (error) {
     throw error.response.data?.content;
+  }
+}
+export async function moviePerPage(page, itemsPerpage) {
+  try {
+    const response = await fetcher.get("/QuanLyPhim/LayDanhSachPhimPhanTrang", {
+      params: {
+        maNhom: "GP07",
+        soTrang: page,
+        soPhanTuTrenTrang: itemsPerpage,
+      },
+    });
+    return response.data.content;
+  } catch (error) {
+    throw error.response.data.content;
   }
 }

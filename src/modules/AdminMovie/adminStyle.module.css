@@ -1,3 +1,12 @@
 .adminWelcome {
   text-align: center;
 }
+.header_signin a {
+  color: white;
+  padding: 0 10px;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+.header_signin a:hover {
+  color: orange;
+}
