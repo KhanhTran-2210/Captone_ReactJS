@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+
 import { getMovies, moviePerPage } from "../../../apis/movieAPI";
+
 import getVideoId from "./videoUltils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Slider from "react-slick";
@@ -22,12 +24,33 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import style from "./showingStyle.module.css";
 
 export default function Showing() {
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["movies"],
-    queryFn: getMovies,
+  // const { data = [], isLoading } = useQuery({
+  //   queryKey: ["movies"],
+  //   queryFn: getMovies,
+  // });
+
+  const itemsPerpage = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data: moviePage = [] } = useQuery({
+    queryKey: ["moviesPage", currentPage, itemsPerpage],
+    queryFn: () => moviePerPage(currentPage, itemsPerpage),
   });
 
-  const navigate = useNavigate();
+  const { items, totalCount, totalPages } = moviePage;
+  console.log("moviePage:", moviePage);
+  // Slick setting
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: itemsPerpage,
+    slidesToScroll: itemsPerpage,
+  };
+  const handleChangePage = (evt, newPage) => {
+    setCurrentPage(newPage);
+  };
+
   const [urlTrailers, setUrlTrailers] = useState({});
   const navigate = useNavigate();
   return (
