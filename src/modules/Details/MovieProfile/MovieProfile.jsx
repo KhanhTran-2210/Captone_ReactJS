@@ -16,15 +16,15 @@ import { ButtonMovie } from "../../../components/ButtonMovie";
 import ReactPlayer from "react-player";
 
 export default function MovieProfile({ movieId }) {
-  const [value, setValue] = useState(5);
-  const [open, setOpen] = useState(false);
   const [trailer, setTrailer] = useState("");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(5);
 
   const handleClose = () => setOpen(false);
 
   const handleOpen = (movieTrailer) => {
     if (!movieTrailer) {
-      alert("link không dúng!");
+      alert("link xãy ra lỗi!");
     }
     setOpen(true);
     setTrailer(movieTrailer);
