@@ -21,7 +21,8 @@ export default function TicketMovie() {
   }
 
   const infoCinema = data?.thongTinPhim || [];
-  const imageCinema = data?.hinhAnh || [];
+  const imageCinema = data?.thongTinPhim.hinhAnh || [];
+  console.log(imageCinema);
 
   return (
     <TicketProvider>
