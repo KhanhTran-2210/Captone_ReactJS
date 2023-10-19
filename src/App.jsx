@@ -16,6 +16,7 @@ import AddUser from "./modules/AdminMovie/Users/AddUser/AddUser";
 import LoginAdmin from "./modules/Auth/pages/LoginAdmin/LoginAdmin";
 import AdminProtectedRoute from "./routers/AdminProtectedRoute/AdminProtectedRoute";
 import AdminUserProvider from "./contexts/AdminContext/AdminContext";
+import UpdateUser from "./modules/AdminMovie/Users/UpdateUser/UpdateUser";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                 <Route path="users-list" element={<UserList />} />
                 <Route path="movie-add" element={<AddMovie />} />
                 <Route path="user-add" element={<AddUser />} />
+                <Route path="user-update/:userId" element={<UpdateUser />} />
               </Route>
             </Route>
             <Route path="log-in-admin" element={<LoginAdmin />} />

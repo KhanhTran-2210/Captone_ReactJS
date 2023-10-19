@@ -50,19 +50,25 @@ export default function AdminMovie() {
             <hr />
             <ListItemButton onClick={handleClickUser}>
               <ListItemIcon>
-                <PersonIcon />
+                <PersonIcon style={{ color: "white" }} />
               </ListItemIcon>
               <ListItemText primary="User" />
               {openUser ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openUser} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <Link to="users-list">
+                <Link
+                  to="users-list"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Danh sách user" />
                   </ListItemButton>
                 </Link>
-                <Link to="user-add">
+                <Link
+                  to="user-add"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Thêm user" />
                   </ListItemButton>
@@ -72,19 +78,25 @@ export default function AdminMovie() {
             <hr />
             <ListItemButton onClick={handleClickMovie}>
               <ListItemIcon>
-                <LocalMoviesIcon />
+                <LocalMoviesIcon style={{ color: "white" }} />
               </ListItemIcon>
               <ListItemText primary="Movie" />
               {openMovie ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openMovie} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <Link to="movie-list">
+                <Link
+                  to="movie-list"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Danh sách movie" />
                   </ListItemButton>
                 </Link>
-                <Link to="movie-add">
+                <Link
+                  to="movie-add"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Thêm movie" />
                   </ListItemButton>

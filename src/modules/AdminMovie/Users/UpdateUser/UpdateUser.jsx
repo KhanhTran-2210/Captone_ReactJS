@@ -1,57 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LockOutlined,
   UserOutlined,
   MailOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Select, notification } from "antd";
-import { apiAddUser } from "../../../../apis/userAPI";
+import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
+import { Form, Input, Button, Select, notification } from "antd";
+import { apiGetUserDetail, apiUpdateUser } from "../../../../apis/userAPI";
 
-export default function AddUser() {
-  const [form] = Form.useForm();
+export default function UpdateUser() {
+  const [userData, setUserData] = useState([]);
   const [, forceUpdate] = useState({});
+
+  const [form] = Form.useForm();
+
+  const { userId } = useParams();
 
   useEffect(() => {
     forceUpdate({});
+    getUserDetail();
   }, []);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      taiKhoan: "",
-      matKhau: "",
-      hoTen: "",
-      email: "",
-      soDT: "",
-      maLoaiNguoiDung: "",
+      taiKhoan: userData.taiKhoan || "",
+      matKhau: userData.matKhau || "",
+      hoTen: userData.hoTen || "",
+      email: userData.email || "",
+      soDT: userData.soDT || "",
+      maLoaiNguoiDung: userData.maLoaiNguoiDung || "",
       maNhom: "GP03",
     },
-    onSubmit: (values) => {
-      console.log(values);
-      apiAddUser(values)
-        .then((res) => {
-          console.log(res);
-          notification.success({
-            message: "Add user successfully!",
-          });
-          setTimeout(() => {
-            window.location.href = "/admin/users-list";
-          }, 1500);
-        })
-        .catch((err) => {
-          console.log(err);
-          notification.error({
-            message: "Add user failed!",
-            description: err.response.data.content,
-          });
+
+    onSubmit: async (values) => {
+      try {
+        const response = await apiUpdateUser(values);
+        notification.success({
+          message: "Cập nhật tài khoản thành công!",
         });
+      } catch (error) {
+        notification.error({
+          message: "Cập nhật tài khoản thất bại!",
+          description: error.response.data.content,
+        });
+      }
     },
   });
 
+  const getUserDetail = async () => {
+    try {
+      const data = await apiGetUserDetail(userId);
+      if (data.content) {
+        setUserData(data.content);
+        form.setFieldsValue({
+          taiKhoan: data.content.taiKhoan,
+          matKhau: data.content.matKhau,
+          hoTen: data.content.hoTen,
+          email: data.content.email,
+          soDT: data.content.soDT,
+          maLoaiNguoiDung: data.content.maLoaiNguoiDung,
+          maNhom: "GP03",
+        });
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   const handleChangeAuth = (value) => {
     formik.setFieldValue("maLoaiNguoiDung", value);
-    console.log("Loại người dùng: ", value);
   };
 
   return (
@@ -64,7 +84,7 @@ export default function AddUser() {
                   border-transparent border-solid shadow-xl rounded-2xl bg-clip-border"
             >
               <div className="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h3 className="ml-3 mb-2 mt-3 font-bold">Add User</h3>
+                <h3 className="ml-3 mb-2 mt-3 font-bold">Update User</h3>
               </div>
 
               <div className="flex justify-between px-0 pt-0 pb-2 mt-3">
@@ -212,7 +232,7 @@ export default function AddUser() {
 
                     <div className="form-row">
                       <Button
-                        className="text-gray-500 font-semibold rounded-md w-full md:w ml-2"
+                        className="text-gray-500 font-semibold rounded-md w-full md:w"
                         htmlType="submit"
                         disabled={
                           !form.isFieldsTouched(true) ||
@@ -222,7 +242,7 @@ export default function AddUser() {
                         }
                         onClick={() => form.resetFields()}
                       >
-                        Add user
+                        Update user
                       </Button>
 
                       <Button
