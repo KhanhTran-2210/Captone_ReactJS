@@ -13,9 +13,12 @@ const fetcher = axios.create({
 fetcher.interceptors.request.use((request) => {
   //Kiểm tra xem user đã đăng nhập hay chưa để thêm token của user vào headers
   const user = JSON.parse(localStorage.getItem("currentUser"));
+  const adminUser = JSON.parse(localStorage.getItem("adminUser"));
 
   if (user) {
     request.headers.Authorization = `Bearer ${user.accessToken}`;
+  } else if (adminUser) {
+    request.headers.Authorization = `Bearer ${adminUser.accessToken}`;
   }
 
   return request;

@@ -92,7 +92,7 @@ export default function Cinema() {
     queryFn: () => getLichChieu(selectedCine),
     enabled: !!selectedCine,
   });
-  console.log(lichChieu);
+
   const handleChangeRap = (cumRapId) => {
     const found = lichChieu[0].lstCumRap.filter(
       (item) => item.maCumRap == cumRapId
@@ -117,13 +117,13 @@ export default function Cinema() {
       handleChangeSystemCinema(firstSystem.maHeThongRap);
     }
   }, [systemCine]);
-  useEffect(() => {
-    // Kiểm tra xem có thông tin cụm rạp nào hay không
-    if (inforSysCine.length > 0) {
-      const firstCumRap = inforSysCine[0];
-      handleChangeRap(firstCumRap.maCumRap);
-    }
-  }, [inforSysCine]);
+  // useEffect(() => {
+  //   // Kiểm tra xem có thông tin cụm rạp nào hay không
+  //   if (inforSysCine.length > 0) {
+  //     const firstCumRap = inforSysCine[0];
+  //     handleChangeRap(firstCumRap.maCumRap);
+  //   }
+  // }, [inforSysCine]);
   return (
     <div id="cinema">
       <Container

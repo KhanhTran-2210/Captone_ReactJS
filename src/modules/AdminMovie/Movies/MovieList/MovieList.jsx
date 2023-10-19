@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { getMovies } from "../../../../apis/movieAPI";
+import { deleteMovie, getMovies } from "../../../../apis/movieAPI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Paper,
   Table,
@@ -23,14 +24,25 @@ export default function MovieList() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data = [], isLoading } = useQuery({
-    queryKey: ["movies"],
-    queryFn: getMovies,
+    queryKey: ["movies", searchTerm],
+    queryFn: () => getMovies({ search: searchTerm }),
+    // enabled: false,
   });
 
-  const filteredData = data.filter((item) => {
-    return item.tenPhim.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const queryClient = useQueryClient();
+  const { mutate: onDeleteMovie } = useMutation(
+    (movieId) => deleteMovie(movieId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("movie-list");
+      },
+    }
+  );
+  const handleDeleteMovie = (movieId) => {
+    onDeleteMovie(movieId);
+  };
   const handleSearchChange = (event) => {
+    event.preventDefault();
     setSearchTerm(event.target.value);
   };
 
@@ -64,7 +76,7 @@ export default function MovieList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData?.item.map((item) => {
+            {data.map((item) => {
               return (
                 <TableRow key={item.maPhim}>
                   <TableCell>
@@ -87,7 +99,7 @@ export default function MovieList() {
                       <Button>
                         <BorderColorIcon />
                       </Button>
-                      <Button>
+                      <Button onClick={() => handleDeleteMovie(item.maPhim)}>
                         <DeleteIcon />
                       </Button>
                       <Button>

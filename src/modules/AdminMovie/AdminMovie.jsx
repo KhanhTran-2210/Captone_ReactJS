@@ -14,6 +14,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Link, Outlet } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
 import style from "./adminStyle.module.css";
 
 import { useAdminUserContext } from "../../contexts/AdminContext/AdminContext";
@@ -56,38 +57,38 @@ export default function AdminMovie() {
             </ListItemButton>
             <Collapse in={openUser} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <Link to="users-list">
+                <Link to="users-list">
+                  <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Danh sách user" />
-                  </Link>
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <Link to="user-add">
+                  </ListItemButton>
+                </Link>
+                <Link to="user-add">
+                  <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Thêm user" />
-                  </Link>
-                </ListItemButton>
+                  </ListItemButton>
+                </Link>
               </List>
             </Collapse>
             <hr />
             <ListItemButton onClick={handleClickMovie}>
               <ListItemIcon>
-                <PersonIcon />
+                <LocalMoviesIcon />
               </ListItemIcon>
               <ListItemText primary="Movie" />
               {openMovie ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openMovie} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <Link to="movie-list">
+                <Link to="movie-list">
+                  <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Danh sách movie" />
-                  </Link>
-                </ListItemButton>
-                <ListItemButton sx={{ pl: 4 }}>
-                  <Link to="movie-add">
+                  </ListItemButton>
+                </Link>
+                <Link to="movie-add">
+                  <ListItemButton sx={{ pl: 4 }}>
                     <ListItemText primary="Thêm movie" />
-                  </Link>
-                </ListItemButton>
+                  </ListItemButton>
+                </Link>
               </List>
             </Collapse>
             <div style={{ display: "flex", marginTop: "150px" }}>
