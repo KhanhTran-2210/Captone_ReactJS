@@ -13,14 +13,36 @@ import {
   TableRow,
   IconButton,
   InputBase,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
 } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WorkIcon from "@mui/icons-material/Work";
 import SearchIcon from "@mui/icons-material/Search";
 import style from "./movieStyle.module.css";
+import { Link } from "react-router-dom";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function MovieList() {
+  //Dialog
+  const [open, setOpen] = useState(false);
+  const [deletingMovieId, setDeletingMovieId] = useState(null);
+  const handleClickOpen = (movieId) => {
+    setOpen(true);
+    setDeletingMovieId(movieId);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  //Search
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data = [], isLoading } = useQuery({
@@ -34,7 +56,11 @@ export default function MovieList() {
     (movieId) => deleteMovie(movieId),
     {
       onSuccess: () => {
+        alert("Xóa phim thành công");
         queryClient.invalidateQueries("movie-list");
+      },
+      onError: () => {
+        alert("Xóa phim thất bại");
       },
     }
   );
@@ -96,15 +122,19 @@ export default function MovieList() {
                   </TableCell>
                   <TableCell>
                     <div style={{ display: "flex" }}>
-                      <Button>
-                        <BorderColorIcon />
-                      </Button>
-                      <Button onClick={() => handleDeleteMovie(item.maPhim)}>
+                      <Link to={`/admin/edit-movie/${item.maPhim}`}>
+                        <Button>
+                          <BorderColorIcon />
+                        </Button>
+                      </Link>
+                      <Button onClick={() => handleClickOpen(item.maPhim)}>
                         <DeleteIcon />
                       </Button>
-                      <Button>
-                        <WorkIcon />
-                      </Button>
+                      <Link to={`/admin/add-showtime/${item.maPhim}`}>
+                        <Button>
+                          <WorkIcon />
+                        </Button>
+                      </Link>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -113,6 +143,35 @@ export default function MovieList() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Bạn có muốn xóa phim này không ?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Phim không thể hoàn tác khi xóa
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={handleClose}>
+            Hủy
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              handleClose();
+              handleDeleteMovie(deletingMovieId);
+            }}
+          >
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

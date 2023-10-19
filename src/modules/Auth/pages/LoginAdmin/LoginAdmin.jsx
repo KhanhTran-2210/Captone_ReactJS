@@ -17,6 +17,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import style from "../signin.module.css";
 import { useAdminUserContext } from "../../../../contexts/AdminContext/AdminContext"; // Thay đổi đường dẫn
 import { signin } from "../../../../apis/userAPI";
+import { useUserContext } from "../../../../contexts/UserContext/UserContext";
 
 const signinSchema = object({
   taiKhoan: string().required("Tài khoản không được để trống"),
@@ -36,10 +37,10 @@ export default function LoginAdmin() {
   };
 
   const {
-    adminUser,
-    handleAdminSignin: onAdminSigninSuccess,
-    handleAdminSignout,
-  } = useAdminUserContext(); // Thay đổi tên hàm và context
+    currentUser,
+    handleSignin: onSiginSuccess,
+    handleSignout,
+  } = useUserContext(); // Thay đổi tên hàm và context
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ export default function LoginAdmin() {
   } = useMutation({
     mutationFn: (payload) => signin(payload),
     onSuccess: (data) => {
-      onAdminSigninSuccess(data);
+      onSiginSuccess(data);
       // if (data?.maLoaiNguoiDung !== "QuanTri") {
       //   // Xóa adminUser khỏi local storage và logout
       //   handleAdminSignout();
@@ -86,11 +87,11 @@ export default function LoginAdmin() {
   };
 
   // adminUser khác null => admin đã đăng nhập => điều hướng về trang Admin
-  if (adminUser) {
+  if (currentUser) {
     const redirectTo = searchParams.get("redirectTo");
     return <Navigate to={redirectTo || "/admin"} replace />;
   }
-  if (adminUser && adminUser?.maLoaiNguoiDung !== "QuanTri") {
+  if (currentUser && currentUser?.maLoaiNguoiDung !== "QuanTri") {
     return <Navigate to="/404" />;
   }
 

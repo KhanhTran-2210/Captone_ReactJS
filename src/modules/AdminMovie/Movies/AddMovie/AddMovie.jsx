@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addMovie } from "../../../../apis/movieAPI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, mixed } from "yup";
 import { useNavigate } from "react-router-dom";
-import { Box, Container, Grid, TextField, Button } from "@mui/material";
+import { Box, Container, Grid, TextField, Button, Switch } from "@mui/material";
 import style from "./addMovie.module.css";
 import MovieList from "../MovieList/MovieList";
 
@@ -20,6 +20,8 @@ const addMovieSchema = object({
   trailer: string().required("Trailer không được để trống"),
   ngayKhoiChieu: string().required("Ngày tháng năm không được để trống"),
 });
+
+const label = { inputProps: { "aria-label": "Switch demo" } };
 
 export default function AddMovie() {
   const {
@@ -35,6 +37,10 @@ export default function AddMovie() {
       hinhAnh: "",
       trailer: "",
       ngayKhoiChieu: "",
+      sapChieu: "",
+      dangChieu: "",
+      hot: "",
+      danhGia: "",
     },
     resolver: yupResolver(addMovieSchema),
   });
@@ -51,6 +57,7 @@ export default function AddMovie() {
       setImgPreview(evt.target.result);
     };
   }, [hinhAnh]);
+  const queryClient = useQueryClient();
   const { mutate: onSubmit } = useMutation({
     mutationFn: (values) => {
       console.log(values);
@@ -63,6 +70,11 @@ export default function AddMovie() {
       }
       formData.append("trailer", values.trailer);
       formData.append("ngayKhoiChieu", values.ngayKhoiChieu);
+
+      formData.append("sapChieu", values.sapChieu);
+      formData.append("dangChieu", values.dangChieu);
+      formData.append("hot", values.hot);
+      formData.append("danhGia", values.danhGia);
       formData.append("maNhom", "GP07");
 
       return addMovie(formData);
@@ -70,7 +82,11 @@ export default function AddMovie() {
 
     onSuccess: () => {
       alert("Thêm phim thành công");
-      navigate(MovieList);
+      queryClient.invalidateQueries("movie-list");
+    },
+    onError: (error) => {
+      const msg = error?.response?.data?.content || "Có lỗi xảy ra";
+      alert(msg);
     },
   });
   return (
@@ -149,13 +165,38 @@ export default function AddMovie() {
                   placeholder="Ngày Khởi Chiếu"
                   type="date"
                   {...register("ngayKhoiChieu", {
-                    setValueAs: (value) => {
-                      return dayjs(value).format("DD/MM/YYYY");
+                    setValueAs: (date) => {
+                      return dayjs(date).format("DD/MM/YYYY");
                     },
                   })}
                 />
               </div>
-
+              <div>
+                <div>
+                  <p>
+                    Đang chiếu <Switch {...label} {...register("dangChieu")} />
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    Sắp chiếu <Switch {...label} {...register("sapChieu")} />
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    Hot <Switch {...label} {...register("hot")} />
+                  </p>
+                </div>
+              </div>
+              <div>
+                <TextField
+                  label="Rating"
+                  type="number"
+                  min="0"
+                  max="10"
+                  {...register("danhGia")}
+                />
+              </div>
               <div className={style.btn}>
                 <Button
                   type="submit"
@@ -173,89 +214,3 @@ export default function AddMovie() {
     </div>
   );
 }
-// import React, { useEffect, useState } from "react";
-// import dayjs from "dayjs";
-// import { useForm } from "react-hook-form";
-// import { useMutation } from "@tanstack/react-query";
-// import { addMovie } from "../../../../apis/movieAPI";
-
-// export default function AddMovie() {
-//   const { register, handleSubmit, watch } = useForm({
-//     defaultValues: {
-//       tenPhim: "",
-//       biDanh: "",
-//       moTa: "",
-//       hinhAnh: "",
-//       trailer: "",
-//       ngayKhoiChieu: "",
-//     },
-//   });
-//   const hinhAnh = watch("hinhAnh");
-//   const [imgPreview, setImgPreview] = useState("");
-//   useEffect(() => {
-//     //Chạy vào usEffect callback khi giá trị của hinhAnh bị thay đổi
-//     const file = hinhAnh?.[0];
-//     if (!file) return;
-//     const fileReader = new FileReader();
-//     fileReader.readAsDataURL(file);
-//     fileReader.onload = (evt) => {
-//       setImgPreview(evt.target.result);
-//     };
-//   }, [hinhAnh]);
-//   const { mutate: onSubmit } = useMutation({
-//     mutationFn: (values) => {
-//       console.log(values);
-//       const formData = new FormData();
-//       formData.append("tenPhim", values.tenPhim);
-//       formData.append("biDanh", values.biDanh);
-//       formData.append("moTa", values.moTa);
-//       formData.append("hinhAnh", values.hinhAnh[0]);
-//       formData.append("trailer", values.trailer);
-//       formData.append("ngayKhoiChieu", values.ngayKhoiChieu);
-//       formData.append("maNhom", "GP07");
-
-//       return addMovie(formData);
-//     },
-//     // onSuccess() => {
-//     //   //Đóng modal hoặc chuyển trang
-//     //   // Sử dụng queryClient.invalidateQueries để gọi API get danh sách phim
-//     // }
-//   });
-//   return (
-//     <form onSubmit={handleSubmit(onSubmit)}>
-//       <div>
-//         <input placeholder="Tên Phim" {...register("tenPhim")} />
-//       </div>
-//       <div>
-//         <input placeholder="Bí Danh" {...register("biDanh")} />
-//       </div>
-//       <div>
-//         <input placeholder="Mô Tả" {...register("moTa")} />
-//       </div>
-//       <div>
-//         <input placeholder="Hình Ảnh" type="file" {...register("hinhAnh")} />
-//         {imgPreview && (
-//           <div>
-//             <img src={imgPreview} width={200} height={200} />
-//           </div>
-//         )}
-//       </div>
-//       <div>
-//         <input placeholder="Trailer" {...register("trailer")} />
-//       </div>
-//       <div>
-//         <input
-//           placeholder="Ngày Khởi Chiếu"
-//           type="date"
-//           {...register("ngayKhoiChieu", {
-//             setValueAs: (value) => {
-//               return dayjs(value).format("DD/MM/YYYY");
-//             },
-//           })}
-//         />
-//       </div>
-
-//       <button>Thêm phim</button>
-//     </form>
-//   );
-// }

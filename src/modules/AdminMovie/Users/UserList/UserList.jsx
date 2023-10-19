@@ -107,7 +107,10 @@ export default function UserList() {
   };
 
   return (
-    <main className="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
+    <main
+      style={{ height: "100vh", overflowY: "scroll" }}
+      className="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl"
+    >
       <div className="w-full px-6 py-6 mx-auto">
         <div className="flex flex-wrap -mx-3">
           <div className="flex-none w-full max-w-full px-3 mt-16">

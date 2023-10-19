@@ -18,6 +18,7 @@ import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
 import style from "./adminStyle.module.css";
 
 import { useAdminUserContext } from "../../contexts/AdminContext/AdminContext";
+import { useUserContext } from "../../contexts/UserContext/UserContext";
 
 export default function AdminMovie() {
   const [openUser, setOpenUser] = useState(true);
@@ -30,7 +31,7 @@ export default function AdminMovie() {
   const handleClickMovie = () => {
     setOpenMovie(!openMovie);
   };
-  const { adminUser, handleAdminSignout } = useAdminUserContext();
+  const { currentUser, handleSignout } = useUserContext();
   return (
     <div>
       <Grid container>
@@ -99,10 +100,10 @@ export default function AdminMovie() {
                       <span>
                         <a href="">
                           <AccountBoxIcon />
-                          {adminUser.hoTen}
+                          {currentUser.hoTen}
                         </a>{" "}
                         |
-                        <a href="/log-in-admin" onClick={handleAdminSignout}>
+                        <a href="/log-in-admin" onClick={handleSignout}>
                           <LogoutIcon />
                           Đăng xuất
                         </a>

@@ -16,6 +16,8 @@ import AddUser from "./modules/AdminMovie/Users/AddUser/AddUser";
 import LoginAdmin from "./modules/Auth/pages/LoginAdmin/LoginAdmin";
 import AdminProtectedRoute from "./routers/AdminProtectedRoute/AdminProtectedRoute";
 import AdminUserProvider from "./contexts/AdminContext/AdminContext";
+import UpdateMovie from "./modules/AdminMovie/Movies/MovieList/UpdateMovie/UpdateMovie";
+import AddLichChieu from "./modules/AdminMovie/Movies/MovieList/AddLichChieu/AddLichChieu";
 
 function App() {
   return (
@@ -48,9 +50,13 @@ function App() {
 
             <Route element={<AdminProtectedRoute />}>
               <Route path="/admin" element={<AdminMovie />}>
+                {/* Movie */}
                 <Route path="movie-list" element={<MovieList />} />
-                <Route path="users-list" element={<UserList />} />
                 <Route path="movie-add" element={<AddMovie />} />
+                <Route path="edit-movie/:id" element={<UpdateMovie />} />
+                <Route path="add-showtime/:id" element={<AddLichChieu />} />
+                {/* User */}
+                <Route path="users-list" element={<UserList />} />
                 <Route path="user-add" element={<AddUser />} />
               </Route>
             </Route>

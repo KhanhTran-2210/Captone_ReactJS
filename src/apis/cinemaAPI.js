@@ -116,12 +116,20 @@ export async function getLichChieu(systemId) {
       {
         params: {
           maHeThongRap: systemId,
-          maNhom: "GP03",
+          maNhom: "GP07",
         },
       }
     );
     return response.data.content;
   } catch (error) {
     throw error.response.data.content;
+  }
+}
+export async function postShowing(values) {
+  try {
+    const response = await fetcher.post("/QuanLyDatVe/TaoLichChieu", values);
+    return response.data?.content;
+  } catch (error) {
+    throw error.response.data?.content;
   }
 }

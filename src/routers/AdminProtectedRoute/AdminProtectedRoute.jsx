@@ -2,17 +2,18 @@ import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { useAdminUserContext } from "../../contexts/AdminContext/AdminContext";
+import { useUserContext } from "../../contexts/UserContext/UserContext";
 
 export default function AdminProtectedRoute({ children }) {
-  const { adminUser, handleAdminSignout } = useAdminUserContext();
+  const { currentUser, handleSignout } = useUserContext();
   const location = useLocation();
 
-  if (!adminUser || adminUser.maLoaiNguoiDung !== "QuanTri") {
+  if (!currentUser || currentUser.maLoaiNguoiDung !== "QuanTri") {
     const url = `/404?redirectTo=${location.pathname}`;
-    handleAdminSignout();
+    handleSignout();
     return <Navigate to={url} replace />;
   }
-  if (!adminUser) {
+  if (!currentUser) {
     //user chưa đăng nhập => redirect về trang login
     const url = `/log-in-admin?redirectTo=${location.pathname}`;
 
