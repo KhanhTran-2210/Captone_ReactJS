@@ -143,6 +143,7 @@ export default function AdminMovie() {
               width="300px"
             />
             <h1 style={{ fontSize: "100px" }}>Welcome Admin!</h1>
+            <h1>Welcome Admin</h1>
           </div> */}
           <Outlet />
         </Grid>
