@@ -98,8 +98,6 @@ const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function UpdateMovie() {
   const { movieId } = useParams();
 
-  console.log("movieId:", movieId);
-
   const queryClient = useQueryClient();
 
   const {
@@ -116,9 +114,9 @@ export default function UpdateMovie() {
       hinhAnh: "",
       trailer: "",
       ngayKhoiChieu: "",
-      sapChieu: false,
-      dangChieu: false,
-      hot: false,
+      sapChieu: "",
+      dangChieu: "",
+      hot: "",
       danhGia: "",
     },
     resolver: yupResolver(updateMovieSchema),
@@ -126,19 +124,18 @@ export default function UpdateMovie() {
 
   const navigate = useNavigate();
 
-  const hinhAnh = watch("hinhAnh");
+  const image = watch("hinhAnh");
   const [imgPreview, setImgPreview] = useState("");
-
+  const blob = new Blob([image[0]]);
   useEffect(() => {
-    //Chạy vào useEffect callback khi giá trị của hinhAnh bị thay đổi
-    const file = hinhAnh?.[0];
-    if (!file) return;
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = (evt) => {
-      setImgPreview(evt.target.result);
-    };
-  }, [hinhAnh]);
+    if (image && image.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImgPreview(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+  }, [image]);
 
   const { data: movie } = useQuery(["movie", movieId], () =>
     getMovieDetails(movieId)
@@ -148,6 +145,8 @@ export default function UpdateMovie() {
     console.log(movie);
     // Đặt giá trị cho các trường từ dữ liệu phim đã có
     if (movie) {
+      setImgPreview(movie.hinhAnh);
+      setValue("hinhAnh", movie.hinhAnh);
       setValue("tenPhim", movie.tenPhim);
       setValue("biDanh", movie.biDanh);
       setValue("moTa", movie.moTa);
@@ -160,6 +159,18 @@ export default function UpdateMovie() {
     }
   }, [movie]);
 
+  useEffect(() => {
+    if (movie) {
+      if (movie.hinhAnh) {
+        setValue("hinhAnh", {
+          originFileObj: {
+            name: "default.png",
+            url: movie.hinhAnh,
+          },
+        });
+      }
+    }
+  }, [movie]);
   const { mutate: onUpdate } = useMutation(
     (values) => {
       const formData = new FormData();
@@ -175,14 +186,21 @@ export default function UpdateMovie() {
       formData.append("dangChieu", values.dangChieu);
       formData.append("hot", values.hot);
       formData.append("danhGia", values.danhGia);
-      formData.append("maPhim", "movieId");
+      formData.append("maNhom", "GP08");
+      formData.append("maPhim", movieId);
 
-      return updateMovie(movieId, formData); // Sử dụng hàm cập nhật phim
+      return updateMovie(formData);
     },
     {
       onSettled: () => {
         queryClient.invalidateQueries(["movie", movieId]);
         queryClient.invalidateQueries("movie-list");
+      },
+      onSuccess: () => {
+        alert("Cập nhật phim thành công");
+      },
+      onError: () => {
+        alert("Cập nhật phim thất bại");
       },
     }
   );
@@ -193,12 +211,10 @@ export default function UpdateMovie() {
         <h1 style={{ textAlign: "center" }}>Update Movie</h1>
         <Grid container>
           <Grid item xs={6}>
-            {imgPreview ? (
+            {imgPreview && (
               <div style={{ margin: "150px" }}>
                 <img src={imgPreview} width="100%" height="100%" />
               </div>
-            ) : (
-              <div className={style.bgImg}></div>
             )}
           </Grid>
           <Grid item xs={6}>
@@ -215,6 +231,16 @@ export default function UpdateMovie() {
                 {errors && <p>{errors.hinhAnh?.message}</p>}
               </div>
 
+              <div>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="ID"
+                  variant="outlined"
+                  disabled
+                  value={movie?.maPhim}
+                />
+              </div>
               <div>
                 <TextField
                   fullWidth

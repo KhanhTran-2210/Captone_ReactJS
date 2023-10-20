@@ -80,10 +80,11 @@ export async function deleteMovie(idMovie) {
 }
 export async function updateMovie(dataMovie) {
   try {
-    const response = await fetcher.put(
-      `/QuanLyPhim/CapNhatPhimUpload`,
+    const response = await fetcher.post(
+      "/QuanLyPhim/CapNhatPhimUpload",
       dataMovie
     );
+
     return response.data.content;
   } catch (error) {
     throw error.response.data.content;
