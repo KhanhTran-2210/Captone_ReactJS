@@ -78,12 +78,12 @@ export async function deleteMovie(idMovie) {
     throw error.response.data.content;
   }
 }
-export async function updateMovie(movieId, updatedMovieData) {
+export async function updateMovie(dataMovie) {
   try {
-    const response = await fetcher.put(`/QuanLyPhim/CapNhatPhimUpload`, {
-      ...updatedMovieData,
-      MaPhim: movieId,
-    });
+    const response = await fetcher.put(
+      `/QuanLyPhim/CapNhatPhimUpload`,
+      dataMovie
+    );
     return response.data.content;
   } catch (error) {
     throw error.response.data.content;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { notification, Space, Table, Modal } from "antd";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import WorkIcon from "@mui/icons-material/Work";
 import { useNavigate } from "react-router-dom";
 import { apiGetUserList, apiDeleteUser } from "../../../../apis/userAPI";
 
@@ -40,25 +42,22 @@ export default function UserList() {
       dataIndex: "soDT",
     },
     {
+      title: "Loại người dùng",
+      key: "maLoaiNguoiDung",
+      dataIndex: "maLoaiNguoiDung",
+    },
+    {
       title: "Action",
       key: "action",
       align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            className="text-2xl text-blue-500"
-            style={{ backgroundColor: "#49CC90" }}
-            onClick={() => handleEdit(record)}
-          >
-            <EditOutlined />
-          </button>
-          <button
-            className="text-2xl text-red-500"
-            style={{ backgroundColor: "#F93E3E" }}
-            onClick={() => deleteUser(record.taiKhoan)}
-          >
-            <DeleteOutlined />
-          </button>
+          <Button onClick={() => handleEdit(record)}>
+            <WorkIcon />
+          </Button>
+          <Button onClick={() => deleteUser(record.taiKhoan)}>
+            <DeleteIcon />
+          </Button>
         </Space>
       ),
     },
@@ -68,7 +67,6 @@ export default function UserList() {
     try {
       const data = await apiGetUserList();
       setUserList(data.content);
-      console.log(data.content);
     } catch (error) {
       throw error.data.content;
     }
@@ -103,7 +101,8 @@ export default function UserList() {
 
   const handleEdit = (record) => {
     const userId = record.taiKhoan;
-    navigate(`/admin/users/edit/${userId}`);
+    console.log(record);
+    navigate(`/admin/user-update/${userId}`);
   };
 
   return (
@@ -123,7 +122,7 @@ export default function UserList() {
                   marginTop: "10px",
                   fontWeight: "bold",
                 }}
-                onClick={() => navigate("/admin/users/add-user")}
+                onClick={() => navigate("/admin/user-add")}
               >
                 Add new
               </button>

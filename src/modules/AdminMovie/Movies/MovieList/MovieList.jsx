@@ -25,7 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import WorkIcon from "@mui/icons-material/Work";
 import SearchIcon from "@mui/icons-material/Search";
 import style from "./movieStyle.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -71,7 +71,10 @@ export default function MovieList() {
     event.preventDefault();
     setSearchTerm(event.target.value);
   };
-
+  const navigate = useNavigate();
+  const handleMove = (movieId) => {
+    navigate(`/admin/edit-movie/${movieId}`);
+  };
   return (
     <div className={style.container}>
       <h1 style={{ textAlign: "center" }}>Movie List</h1>
@@ -130,11 +133,10 @@ export default function MovieList() {
                       <Button onClick={() => handleClickOpen(item.maPhim)}>
                         <DeleteIcon />
                       </Button>
-                      <Link to={`/admin/add-showtime/${item.maPhim}`}>
-                        <Button>
-                          <WorkIcon />
-                        </Button>
-                      </Link>
+
+                      <Button onClick={() => handleMove(item.maPhim)}>
+                        <WorkIcon />
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

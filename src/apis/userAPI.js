@@ -1,6 +1,7 @@
 import fetcher from "./fetcher";
 import axiosClient from "./axiosClient";
 
+// apiSignin
 export const signin = async (payload) => {
   try {
     const response = await fetcher.post("/QuanLyNguoiDung/DangNhap", payload);
@@ -10,6 +11,7 @@ export const signin = async (payload) => {
   }
 };
 
+// apiSignup
 export const signup = async (payload) => {
   try {
     const response = await fetcher.post("/QuanLyNguoiDung/DangKy", payload);
@@ -21,20 +23,17 @@ export const signup = async (payload) => {
 
 // apiGetUserInfo
 export const apiGetUserList = async () => {
-  const { data } = await axiosClient.get(
-    "/QuanLyNguoiDung/LayDanhSachNguoiDung",
-    {
-      params: {
-        maNhom: "GP03",
-      },
-    }
-  );
+  const { data } = await fetcher.get("/QuanLyNguoiDung/LayDanhSachNguoiDung", {
+    params: {
+      maNhom: "GP03",
+    },
+  });
   return data;
 };
 
 // apiDeleteUser
 export const apiDeleteUser = async (taiKhoan) => {
-  const { data } = await axiosClient.delete(
+  const { data } = await fetcher.delete(
     `/QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`
   );
   return data;
@@ -42,7 +41,7 @@ export const apiDeleteUser = async (taiKhoan) => {
 
 // apiAddUser
 export const apiAddUser = async (userData) => {
-  const { data } = await axiosClient.post(
+  const { data } = await fetcher.post(
     "/QuanLyNguoiDung/ThemNguoiDung",
     userData
   );
@@ -51,7 +50,7 @@ export const apiAddUser = async (userData) => {
 
 // apiUpdateUser
 export const apiUpdateUser = async (userData) => {
-  const { data } = await axiosClient.post(
+  const { data } = await fetcher.post(
     "/QuanLyNguoiDung/CapNhatThongTinNguoiDung",
     userData
   );
@@ -60,14 +59,8 @@ export const apiUpdateUser = async (userData) => {
 
 // apiGetUserDetail
 export const apiGetUserDetail = async (taiKhoan) => {
-  const { data } = await axiosClient.post(
+  const { data } = await fetcher.post(
     `/QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${taiKhoan}`
   );
-  return data;
-};
-
-// apiUserLogin
-export const apiUserLogin = async (values) => {
-  const { data } = await axiosClient.post("/QuanLyNguoiDung/DangNhap", values);
   return data;
 };
