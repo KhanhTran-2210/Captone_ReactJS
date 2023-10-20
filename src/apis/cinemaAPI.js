@@ -58,7 +58,7 @@ export async function getTheaterShowtimes(theaterId) {
       {
         params: {
           maHeThongRap: theaterId,
-          maNhom: "GP03",
+          maNhom: "GP08",
         },
       }
     );
@@ -116,7 +116,7 @@ export async function getLichChieu(systemId) {
       {
         params: {
           maHeThongRap: systemId,
-          maNhom: "GP07",
+          maNhom: "GP08",
         },
       }
     );

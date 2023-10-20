@@ -72,8 +72,11 @@ export default function MovieList() {
     setSearchTerm(event.target.value);
   };
   const navigate = useNavigate();
-  const handleMove = (movieId) => {
+  const handleMoveEdit = (movieId) => {
     navigate(`/admin/edit-movie/${movieId}`);
+  };
+  const handleMoveAddLich = (movieId) => {
+    navigate(`/admin/add-showtime/${movieId}`);
   };
   return (
     <div className={style.container}>
@@ -126,7 +129,7 @@ export default function MovieList() {
                   <TableCell>
                     <div style={{ display: "flex" }}>
                       <Link to={`/admin/edit-movie/${item.maPhim}`}>
-                        <Button>
+                        <Button onClick={() => handleMoveEdit(item.maPhim)}>
                           <BorderColorIcon />
                         </Button>
                       </Link>
@@ -134,7 +137,7 @@ export default function MovieList() {
                         <DeleteIcon />
                       </Button>
 
-                      <Button onClick={() => handleMove(item.maPhim)}>
+                      <Button onClick={() => handleMoveAddLich(item.maPhim)}>
                         <WorkIcon />
                       </Button>
                     </div>

@@ -25,7 +25,7 @@ export default function AddUser() {
       email: "",
       soDT: "",
       maLoaiNguoiDung: "",
-      maNhom: "GP03",
+      maNhom: "GP08",
     },
     onSubmit: (values) => {
       console.log(values);

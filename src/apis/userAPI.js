@@ -25,7 +25,7 @@ export const signup = async (payload) => {
 export const apiGetUserList = async () => {
   const { data } = await fetcher.get("/QuanLyNguoiDung/LayDanhSachNguoiDung", {
     params: {
-      maNhom: "GP03",
+      maNhom: "GP08",
     },
   });
   return data;

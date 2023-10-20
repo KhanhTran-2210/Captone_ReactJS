@@ -47,7 +47,15 @@ export default function AdminMovie() {
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
-            <h1 style={{ textAlign: "center" }}>ADMIN</h1>
+            <div>
+              <a href="/admin">
+                <h1 style={{ textAlign: "center" }}>ADMIN</h1>
+              </a>
+              <a href="/">
+                <p style={{ textAlign: "center" }}>Quay về trang home</p>
+              </a>
+            </div>
+
             <hr />
             <ListItemButton onClick={handleClickUser}>
               <ListItemIcon>

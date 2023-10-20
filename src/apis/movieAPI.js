@@ -11,7 +11,7 @@ export async function getBanner() {
 
 export async function getMovies({ search }) {
   try {
-    const params = { maNhom: "GP07" };
+    const params = { maNhom: "GP08" };
     if (search) {
       params.tenPhim = search;
     }
@@ -55,7 +55,7 @@ export async function moviePerPage(page, itemsPerpage) {
   try {
     const response = await fetcher.get("/QuanLyPhim/LayDanhSachPhimPhanTrang", {
       params: {
-        maNhom: "GP07",
+        maNhom: "GP08",
         soTrang: page,
         soPhanTuTrenTrang: itemsPerpage,
       },
@@ -80,10 +80,11 @@ export async function deleteMovie(idMovie) {
 }
 export async function updateMovie(dataMovie) {
   try {
-    const response = await fetcher.put(
-      `/QuanLyPhim/CapNhatPhimUpload`,
+    const response = await fetcher.post(
+      "/QuanLyPhim/CapNhatPhimUpload",
       dataMovie
     );
+
     return response.data.content;
   } catch (error) {
     throw error.response.data.content;

@@ -75,7 +75,7 @@ export default function AddMovie() {
       formData.append("dangChieu", values.dangChieu);
       formData.append("hot", values.hot);
       formData.append("danhGia", values.danhGia);
-      formData.append("maNhom", "GP07");
+      formData.append("maNhom", "GP08");
 
       return addMovie(formData);
     },
