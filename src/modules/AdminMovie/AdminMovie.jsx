@@ -135,17 +135,17 @@ export default function AdminMovie() {
             </div>
           </List>
         </Grid>
-        <Grid item xs={10}>
-          {/* <div className={style.adminWelcome}>
+        {/* <Grid item xs={10}>
+          <div className={style.adminWelcome}>
             <img
               src="./img/animation_lnovjcw6_small.gif"
               alt=""
               width="300px"
             />
-            <h1>Welcome Admin</h1>
-          </div> */}
+            <h1 style={{ fontSize: "100px" }}>Welcome Admin!</h1>
+          </div>
           <Outlet />
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );

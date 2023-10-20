@@ -17,11 +17,16 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import getVideoId from "../Showing/videoUltils";
 import dayjs from "dayjs";
 import style from "./bannerStyle.module.css";
+import { useNavigate } from "react-router-dom";
 
 import "swiper/css";
 import "swiper/css/navigation";
 
 export default function Banner() {
+  const [codeTimeCinema, setCodeTimeCinema] = useState("");
+
+  const navigate = useNavigate();
+
   const {
     data: banners = [],
     isLoading,
@@ -68,12 +73,7 @@ export default function Banner() {
     setSelectedShowtime(event.target.value);
     setIsShowtimeSelected(true);
   };
-  const handleBuyTicket = () => {
-    if (!isMovieSelected || !isCinemaSelected || !isShowtimeSelected) {
-      alert("Vui lòng chọn đầy đủ thông tin.");
-      return;
-    }
-  };
+
   if (isLoading) {
     return (
       <div>
@@ -223,6 +223,9 @@ export default function Banner() {
                               <MenuItem
                                 key={lichChieu.maLichChieu}
                                 value={lichChieu.maLichChieu}
+                                onClick={() => {
+                                  setCodeTimeCinema(lichChieu.maLichChieu);
+                                }}
                               >
                                 <p>{time}</p>
                               </MenuItem>
@@ -244,7 +247,17 @@ export default function Banner() {
               <Button
                 variant="contained"
                 className={style.btnForm}
-                onClick={handleBuyTicket}
+                onClick={() => {
+                  if (
+                    !isMovieSelected ||
+                    !isCinemaSelected ||
+                    !isShowtimeSelected
+                  ) {
+                    alert("Vui lòng chọn đầy đủ thông tin.");
+                    return;
+                  }
+                  navigate(`/tickets/${codeTimeCinema}`);
+                }}
               >
                 Mua vé ngay
               </Button>

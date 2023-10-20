@@ -7,6 +7,7 @@ import { useTicketContext } from "../../../contexts/TicketContext/TicketContext"
 import MovieSeatItem from "./MovieSeatItem/MovieSeatItem";
 import Loading from "../../../components/Loading";
 import { Box, Typography } from "@mui/material";
+
 export default function MovieSeatList({ showtimeId }) {
   const noteSeat = [
     { bg: "#404040", statusSet: "Đã đặt" },
