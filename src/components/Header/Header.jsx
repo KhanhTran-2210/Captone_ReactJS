@@ -26,15 +26,14 @@ export default function Header() {
                   height="40"
                   width="40"
                 /> */}
-                <p
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    color: "#b20000",
-                  }}
-                >
-                  DK Movie
-                </p>
+                <a href="/">
+                  <img
+                    src="./img/logohome.png"
+                    alt=""
+                    width="50px"
+                    height="50px"
+                  />
+                </a>
               </Typography>
             </Grid>
             <Grid item xs={4}>

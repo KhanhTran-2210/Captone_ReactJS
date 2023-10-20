@@ -47,7 +47,7 @@ export default function AdminMovie() {
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
-            <div>
+            <div className={style.headerAdmin}>
               <a href="/admin">
                 <h1 style={{ textAlign: "center" }}>ADMIN</h1>
               </a>
@@ -135,17 +135,17 @@ export default function AdminMovie() {
             </div>
           </List>
         </Grid>
-        {/* <Grid item xs={10}>
-          <div className={style.adminWelcome}>
+        <Grid item xs={10}>
+          {/* <div className={style.adminWelcome}>
             <img
               src="./img/animation_lnovjcw6_small.gif"
               alt=""
               width="300px"
             />
             <h1 style={{ fontSize: "100px" }}>Welcome Admin!</h1>
-          </div>
+          </div> */}
           <Outlet />
-        </Grid> */}
+        </Grid>
       </Grid>
     </div>
   );

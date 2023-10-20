@@ -64,6 +64,7 @@ export default function Signup() {
   } = useMutation({
     mutationFn: (payload) => signup(payload),
     onSuccess: () => {
+      alert("Đăng kí thành công");
       navigate("/sign-in");
     },
   });
