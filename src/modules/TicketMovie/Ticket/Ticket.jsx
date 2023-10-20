@@ -10,9 +10,9 @@ import {
 import { useTicketContext } from "../../../contexts/TicketContext/TicketContext";
 import { ButtonMovie } from "../../../components/ButtonMovie";
 import MuiAlert from "@mui/material/Alert";
-import { red } from "@mui/material/colors";
 
 export default function Ticket({ infoCinema }) {
+  console.log(infoCinema);
   const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });

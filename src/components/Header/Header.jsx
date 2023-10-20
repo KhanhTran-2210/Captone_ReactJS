@@ -20,7 +20,21 @@ export default function Header() {
           <Grid container>
             <Grid item xs={4}>
               <Typography variant="h6">
-                <img src="" alt="Logo" height="40" />
+                {/* <img
+                  src="../../../public/img/animation_lmvydl73_small.gif"
+                  alt="Logo"
+                  height="40"
+                  width="40"
+                /> */}
+                <p
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#b20000",
+                  }}
+                >
+                  DK Movie
+                </p>
               </Typography>
             </Grid>
             <Grid item xs={4}>

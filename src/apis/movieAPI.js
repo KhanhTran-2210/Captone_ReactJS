@@ -11,7 +11,7 @@ export async function getBanner() {
 
 export async function getMovies({ search }) {
   try {
-    const params = { maNhom: "GP07" };
+    const params = { maNhom: "GP08" };
     if (search) {
       params.tenPhim = search;
     }
@@ -55,7 +55,7 @@ export async function moviePerPage(page, itemsPerpage) {
   try {
     const response = await fetcher.get("/QuanLyPhim/LayDanhSachPhimPhanTrang", {
       params: {
-        maNhom: "GP07",
+        maNhom: "GP08",
         soTrang: page,
         soPhanTuTrenTrang: itemsPerpage,
       },

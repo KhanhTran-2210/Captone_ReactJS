@@ -22,7 +22,7 @@ export default function TicketMovie() {
 
   const infoCinema = data?.thongTinPhim || [];
   const imageCinema = data?.thongTinPhim.hinhAnh || [];
-  console.log(imageCinema);
+  console.log(data);
 
   return (
     <TicketProvider>
@@ -83,7 +83,7 @@ export default function TicketMovie() {
               <MovieSeatlist showtimeId={showtimeId} />
             </Grid>
             <Grid item xs={12} maxWidth="100%">
-              <Ticket infoCinema={infoCinema} data={data} />
+              <Ticket infoCinema={infoCinema} />
             </Grid>
           </Grid>
         </Container>

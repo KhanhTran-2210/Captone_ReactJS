@@ -6,7 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 import Signin from "./modules/Auth/pages/Signin";
 import Signup from "./modules/Auth/pages/Signup";
 import UserProvider from "./contexts/UserContext/UserContext";
-import ProtectedRout from "./routers/ProtectedRout";
+import ProtectedRoute from "./routers/ProtectedRout/ProtectedRoute";
 import AdminMovie from "./modules/AdminMovie";
 import TicketMovie from "./modules/TicketMovie/TicketMovie";
 import MovieList from "./modules/AdminMovie/Movies/MovieList/MovieList";
@@ -37,11 +37,8 @@ function App() {
                 </ProtectedRout>
               }
             /> */}
-              <Route element={<ProtectedRout />}>
-                <Route
-                  path="tickets/:showtimeId"
-                  element={<div>Tiket page</div>}
-                />
+              <Route element={<ProtectedRoute />}>
+                <Route path="tickets/:showtimeId" element={<TicketMovie />} />
               </Route>
               <Route path="/sign-in" element={<Signin />} />
               <Route path="/sign-up" element={<Signup />} />

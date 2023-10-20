@@ -18,6 +18,7 @@ import {
 } from "../../../apis/cinemaAPI";
 import style from "./cinemaStyle.module.css";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 // --------------------------------------------------------------------
 function TabPanel(props) {
@@ -70,6 +71,8 @@ function a11yProps(index) {
 // ------------------------------------------------------------
 export default function Cinema() {
   const [lichChieuTheoCum, setLichChieuTheoCum] = useState([]);
+
+  const navigate = useNavigate();
 
   const { data: systemCine = [] } = useQuery({
     queryKey: ["systemCinema"],
@@ -262,6 +265,11 @@ export default function Cinema() {
                                   <div key={lichChieu.maLichChieu}>
                                     <button
                                       className={style.ngayGioChieuButton}
+                                      onClick={() =>
+                                        navigate(
+                                          `/tickets/${lichChieu.maLichChieu}`
+                                        )
+                                      }
                                     >
                                       {formattedDate}
                                     </button>
