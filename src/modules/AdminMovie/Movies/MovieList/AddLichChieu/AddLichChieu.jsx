@@ -20,24 +20,39 @@ import { DatePicker } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, mixed } from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "../../AddMovie/addMovie.module.css";
 import { getMovieDetails } from "../../../../../apis/movieAPI";
+import dayjs from "dayjs";
+import { useSnackbar } from "notistack";
 
 const { RangePicker } = DatePicker;
 const addCinemaSchema = object({
-  ngayChieuGioChieu: mixed()
-    .test("isValidDate", "Ngày giờ không hợp lệ", (value) => {
-      // Thực hiện kiểm tra xem giá trị có phải là ngày hợp lệ không
-      return value ? !isNaN(Date.parse(value)) : false;
-    })
+  ngayChieuGioChieu: string()
+    .matches(
+      /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/,
+      "Ngày giờ không đúng định dạng dd/mm/yyyy hh:mm:ss"
+    )
     .required("Ngày giờ không được để trống"),
-  giaVe: string().required("Giá không được để trống"),
-  maHeThongRap: string().required("Hệ thống rạp không được để trống"),
-  maCumRap: string().required("Cụm rạp không được để trống"),
+  giaVe: mixed()
+    .test("isValidPrice", "Giá vé phải từ 75000 đến 95000", (value) => {
+      return value >= 75000 && value <= 95000;
+    })
+    .required("Giá không được để trống"),
 });
 
 export default function AddLichChieu() {
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
+  const handleSnackbar = (message, variant) => () => {
+    enqueueSnackbar(message, {
+      variant: variant,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
+  };
   const [selectedCine, setSelectedCine] = useState("");
   const [seclectSysCine, setSelectSysCine] = useState("");
 
@@ -50,6 +65,7 @@ export default function AddLichChieu() {
   } = useForm({
     defaultValues: {
       maHeThongRap: "",
+      maCumRap: "",
       maPhim: "",
       ngayChieuGioChieu: "",
       maRap: "",
@@ -72,8 +88,21 @@ export default function AddLichChieu() {
   const { data: movie } = useQuery(["movie", movieId], () =>
     getMovieDetails(movieId)
   );
+
+  const navigate = useNavigate();
   const { mutate: onSubmit } = useMutation({
     mutationFn: (values) => postShowing({ ...values, maPhim: movieId }),
+    onSettled: () => {
+      queryClient.invalidateQueries(["movie", movieId]);
+      queryClient.invalidateQueries("movie-list");
+    },
+    onSuccess: () => {
+      handleSnackbar("Thêm lịch chiếu thành công!", "success")();
+      navigate("/admin/movie-list");
+    },
+    onError: () => {
+      handleSnackbar("Thêm lịch chiếu thất bại!", "error")();
+    },
   });
 
   const queryClient = useQueryClient();
@@ -174,7 +203,7 @@ export default function AddLichChieu() {
                         // labelId="cumRapLabel"
                         // id="maCumRap"
                         label="Cụm rạp"
-                        value={seclectSysCine}
+                        value={field.value}
                         onChange={(e) => {
                           field.onChange(e);
                           handleChangeCumRap(e);
@@ -193,8 +222,12 @@ export default function AddLichChieu() {
                 </FormControl>
               </Box>
               <div>
-                {" "}
-                <DatePicker showTime onChange={onChange} onOk={onOk} />
+                <TextField
+                  label="Ngày giờ chiếu"
+                  placeholder="DD/MM/YYYY hh:mm:ss"
+                  {...register("ngayChieuGioChieu")}
+                />
+                <p>{errors?.ngayChieuGioChieu?.message}</p>
               </div>
 
               <div>
@@ -203,10 +236,13 @@ export default function AddLichChieu() {
                   type="number"
                   min="75000"
                   max="95000"
+                  {...register("giaVe")}
                 />
+                <p>{errors?.giaVe?.message}</p>
               </div>
               <div className={style.btn}>
                 <Button
+                  type="submit"
                   variant="contained"
                   color="success"
                   style={{ padding: "10px 30px" }}

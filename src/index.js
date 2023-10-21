@@ -6,13 +6,16 @@ import { ThemeProvider } from "@mui/material";
 import { customTheme } from "./createTheme";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { SnackbarProvider } from "notistack";
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={customTheme}>
-      <App />
+      <SnackbarProvider>
+        <App />
+      </SnackbarProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

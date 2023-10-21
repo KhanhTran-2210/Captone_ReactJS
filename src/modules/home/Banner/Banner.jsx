@@ -141,7 +141,7 @@ export default function Banner() {
                   label="Phim"
                 >
                   {movies
-                    .filter((movie) => movie.sapChieu === true)
+                    .filter((movie) => movie.dangChieu === true)
                     .map((movie) => (
                       <MenuItem key={movie.maPhim} value={movie.maPhim}>
                         {movie.tenPhim}
@@ -189,28 +189,6 @@ export default function Banner() {
                   onChange={handleChangeShowtime}
                   label="Ngày và Giờ"
                 >
-                  {/* {cinemaSystem[selectedCinema]?.cumRapChieu ? (
-                    cinemaSystem[selectedCinema].cumRapChieu.map((cumRap) =>
-                      cumRap.lichChieuPhim ? (
-                        cumRap.lichChieuPhim.map((lichChieu) => (
-                          <MenuItem
-                            key={lichChieu.maLichChieu}
-                            value={lichChieu.maLichChieu}
-                          >
-                            <p>{lichChieu.ngayChieuGioChieu}</p>
-                          </MenuItem>
-                        ))
-                      ) : (
-                        <MenuItem disabled>
-                          Không có lịch chiếu cho rạp này
-                        </MenuItem>
-                      )
-                    )
-                  ) : (
-                    <MenuItem disabled>
-                      Không có rạp chiếu cho phim này
-                    </MenuItem>
-                  )} */}
                   {selectedCinema &&
                     cinemaSystem.map((heThongRap) =>
                       heThongRap.cumRapChieu.map((cumRap) =>

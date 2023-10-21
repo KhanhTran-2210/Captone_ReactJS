@@ -19,6 +19,7 @@ import {
   DialogContentText,
   DialogTitle,
   Slide,
+  Tooltip,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -29,6 +30,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import SearchIcon from "@mui/icons-material/Search";
 import style from "./movieStyle.module.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,16 +39,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 export default function MovieList() {
-  //Alert
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const handleOpenSnackbar = () => {
-    setOpenSnackbar(true);
-  };
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
+  const handleSnackbar = (message, variant) => () => {
+    enqueueSnackbar(message, {
+      variant: variant,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
   };
   //Dialog
   const [open, setOpen] = useState(false);
@@ -76,11 +78,11 @@ export default function MovieList() {
     (movieId) => deleteMovie(movieId),
     {
       onSuccess: () => {
-        handleOpenSnackbar();
+        handleSnackbar("Xóa phim thành công!", "success")();
         queryClient.invalidateQueries("movie-list");
       },
       onError: () => {
-        alert("Xóa phim thất bại");
+        handleSnackbar("Xóa phim thất bại!", "error")();
       },
     }
   );
@@ -157,18 +159,23 @@ export default function MovieList() {
                   </TableCell>
                   <TableCell>
                     <div style={{ display: "flex" }}>
-                      <Link to={`/admin/edit-movie/${item.maPhim}`}>
+                      <Tooltip title="Chỉnh sửa phim">
                         <Button onClick={() => handleMoveEdit(item.maPhim)}>
                           <BorderColorIcon />
                         </Button>
-                      </Link>
-                      <Button onClick={() => handleClickOpen(item.maPhim)}>
-                        <DeleteIcon />
-                      </Button>
+                      </Tooltip>
 
-                      <Button onClick={() => handleMoveAddLich(item.maPhim)}>
-                        <WorkIcon />
-                      </Button>
+                      <Tooltip title="Xóa phim">
+                        <Button onClick={() => handleClickOpen(item.maPhim)}>
+                          <DeleteIcon />
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip title="Thêm lịch chiếu">
+                        <Button onClick={() => handleMoveAddLich(item.maPhim)}>
+                          <WorkIcon />
+                        </Button>
+                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -206,30 +213,6 @@ export default function MovieList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          sx={{ width: "100%" }}
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleCloseSnackbar}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          }
-        >
-          Xóa thành công
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

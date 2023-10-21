@@ -42,7 +42,7 @@ export default function AdminMovie() {
 
   const { currentUser, handleSignout } = useUserContext();
   return (
-    <div>
+    <div style={{ height: "100vh", overflowY: "scroll" }}>
       <Grid container>
         <Grid item xs={2}>
           <List

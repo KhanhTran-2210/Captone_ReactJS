@@ -1,75 +1,3 @@
-// import React, { useEffect, useState } from "react";
-
-// import { useParams } from "react-router-dom";
-// import { useFormik } from "formik";
-// import { updateMovie, getMovieDetails } from "../../../../../apis/movieAPI";
-// import { useParams } from "react-router-dom";
-
-// export default function UpdateMovie() {
-//   const [movieData, setMovieData] = useState([]);
-//   const [forceUpdate] = useState({});
-//   const [form] = Form.useForm();
-//   const { movieId } = useParams();
-
-//   useEffect(() => {
-//     forceUpdate({});
-//     getUserDetail();
-//   }, []);
-
-//   const formik = useFormik({
-//     enableReinitialize: true,
-//     initialValues: {
-//       tenPhim: movieData.tenPhim || "",
-//       biDanh: movieData.biDanh || "",
-//       moTa: movieData.moTa || "",
-//       hinhAnh: movieData.hinhAnh || "",
-//       trailer: movieData.trailer || "",
-//       sapChieu: movieData.sapChieu || "",
-//       dangChieu: movieData.dangChieu || "",
-//       hot: movieData.hot || "",
-//       ngayKhoiChieu: movieData.ngayKhoiChieu || "",
-//       danhGia: movieData.danhGia || "",
-//     },
-
-//     onSubmit: async (values) => {
-//       try {
-//         const response = await updateMovie(values);
-//         notification.success({
-//           message: "Cập nhật phim thành công!",
-//         });
-//       } catch (error) {
-//         notification.error({
-//           message: "Cập nhật phim thất bại!",
-//           description: error.response.data.content,
-//         });
-//       }
-//     },
-//   });
-//   const getMovieDetails = async () => {
-//     try {
-//       const data = await getMovieDetails(movieId);
-//       if (data.content) {
-//         setMovieData(data.content);
-//         form.setFieldsValue({
-//           tenPhim: data.content.tenPhim,
-//           biDanh: data.content.biDanh,
-//           moTa: data.content.moTa,
-//           hinhAnh: data.content.hinhAnh,
-//           trailer: data.content.trailer,
-//           sapChieu: data.content.sapChieu,
-//           dangChieu: data.content.dangChieu,
-//           hot: data.content.hot,
-//           ngayKhoiChieu: data.content.ngayKhoiChieu,
-//           danhGia: data.content.danhGia,
-//         });
-//       }
-//     } catch (error) {
-//       console.log("Error: ", error);
-//     }
-//   };
-//   return <div>UpdateMovie</div>;
-// }
-
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
@@ -78,7 +6,9 @@ import { getMovieDetails, updateMovie } from "../../../../../apis/movieAPI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, mixed } from "yup";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { Box, Container, Grid, TextField, Button, Switch } from "@mui/material";
+import { Container, Grid, TextField, Button, Switch } from "@mui/material";
+
+import { SnackbarProvider, useSnackbar } from "notistack";
 import style from "../../AddMovie/addMovie.module.css";
 
 const updateMovieSchema = object({
@@ -96,6 +26,18 @@ const updateMovieSchema = object({
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 export default function UpdateMovie() {
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
+  const handleSnackbar = (message, variant) => () => {
+    enqueueSnackbar(message, {
+      variant: variant,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
+  };
+
   const { movieId } = useParams();
 
   const queryClient = useQueryClient();
@@ -171,6 +113,7 @@ export default function UpdateMovie() {
       }
     }
   }, [movie]);
+
   const { mutate: onUpdate } = useMutation(
     (values) => {
       const formData = new FormData();
@@ -197,10 +140,11 @@ export default function UpdateMovie() {
         queryClient.invalidateQueries("movie-list");
       },
       onSuccess: () => {
-        alert("Cập nhật phim thành công");
+        handleSnackbar("Cập nhật phim thành công!", "success")();
+        navigate("/admin/movie-list");
       },
       onError: () => {
-        alert("Cập nhật phim thất bại");
+        handleSnackbar("Cập nhật phim thất bại!", "error")();
       },
     }
   );
@@ -234,7 +178,8 @@ export default function UpdateMovie() {
               <div>
                 <TextField
                   fullWidth
-                  id="outlined-basic"
+                  id="outlined-multiline-static"
+                  multiline
                   label="ID"
                   variant="outlined"
                   disabled
@@ -244,7 +189,8 @@ export default function UpdateMovie() {
               <div>
                 <TextField
                   fullWidth
-                  id="outlined-basic"
+                  id="outlined-multiline-static"
+                  multiline
                   label="Tên phim"
                   variant="outlined"
                   {...register("tenPhim")}
@@ -255,7 +201,8 @@ export default function UpdateMovie() {
               <div>
                 <TextField
                   fullWidth
-                  id="outlined-basic"
+                  id="outlined-multiline-static"
+                  multiline
                   label="Bí danh"
                   variant="outlined"
                   {...register("biDanh")}
@@ -266,7 +213,8 @@ export default function UpdateMovie() {
               <div>
                 <TextField
                   fullWidth
-                  id="outlined-basic"
+                  id="outlined-multiline-static"
+                  multiline
                   label="Trailer"
                   variant="outlined"
                   {...register("trailer")}
@@ -314,6 +262,8 @@ export default function UpdateMovie() {
               </div>
               <div>
                 <TextField
+                  id="outlined-multiline-static"
+                  multiline
                   label="Rating"
                   type="number"
                   min="0"
