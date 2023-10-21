@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Grid,
@@ -11,7 +11,7 @@ import {
 
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
@@ -31,6 +31,15 @@ export default function AdminMovie() {
   const handleClickMovie = () => {
     setOpenMovie(!openMovie);
   };
+  //Outlet
+  const location = useLocation();
+  const [showWelcome, setShowWelcome] = useState(true);
+  useEffect(() => {
+    if (location.pathname !== "/admin") {
+      setShowWelcome(false);
+    }
+  }, [location.pathname]);
+
   const { currentUser, handleSignout } = useUserContext();
   return (
     <div>
@@ -136,15 +145,16 @@ export default function AdminMovie() {
           </List>
         </Grid>
         <Grid item xs={10}>
-          {/* <div className={style.adminWelcome}>
-            <img
-              src="./img/animation_lnovjcw6_small.gif"
-              alt=""
-              width="300px"
-            />
-            <h1 style={{ fontSize: "100px" }}>Welcome Admin!</h1>
-            <h1>Welcome Admin</h1>
-          </div> */}
+          {showWelcome && (
+            <div className={style.adminWelcome}>
+              <img
+                src="./img/animation_lnovjcw6_small.gif"
+                alt=""
+                width="300px"
+              />
+              <h1 style={{ fontSize: "100px" }}>Welcome Admin!</h1>
+            </div>
+          )}
           <Outlet />
         </Grid>
       </Grid>

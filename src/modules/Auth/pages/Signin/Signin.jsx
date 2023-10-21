@@ -138,6 +138,9 @@ export default function Signin() {
                 Đăng nhập
               </Button>
               {error && <p>{error}</p>}
+              <div style={{ textAlign: "right" }}>
+                <a href="/sign-up">Bạn chưa có tài khoản ?</a>
+              </div>
             </form>
           </Box>
         </div>

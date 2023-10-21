@@ -5,6 +5,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin-top: 20px;
 }
 .background_loginAdmin {
   background-image: url(../../../../public/img/cms3admin-background-01.jpg);

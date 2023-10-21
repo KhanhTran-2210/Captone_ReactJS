@@ -20,6 +20,9 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import CloseIcon from "@mui/icons-material/Close";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WorkIcon from "@mui/icons-material/Work";
@@ -30,9 +33,24 @@ import { Link, useNavigate } from "react-router-dom";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 export default function MovieList() {
+  //Alert
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
   //Dialog
   const [open, setOpen] = useState(false);
+
   const [deletingMovieId, setDeletingMovieId] = useState(null);
   const handleClickOpen = (movieId) => {
     setOpen(true);
@@ -42,6 +60,7 @@ export default function MovieList() {
   const handleClose = () => {
     setOpen(false);
   };
+
   //Search
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -51,12 +70,13 @@ export default function MovieList() {
     // enabled: false,
   });
 
+  //Delete
   const queryClient = useQueryClient();
   const { mutate: onDeleteMovie } = useMutation(
     (movieId) => deleteMovie(movieId),
     {
       onSuccess: () => {
-        alert("Xóa phim thành công");
+        handleOpenSnackbar();
         queryClient.invalidateQueries("movie-list");
       },
       onError: () => {
@@ -71,6 +91,8 @@ export default function MovieList() {
     event.preventDefault();
     setSearchTerm(event.target.value);
   };
+
+  // Navigate
   const navigate = useNavigate();
   const handleMoveEdit = (movieId) => {
     navigate(`/admin/edit-movie/${movieId}`);
@@ -78,6 +100,10 @@ export default function MovieList() {
   const handleMoveAddLich = (movieId) => {
     navigate(`/admin/add-showtime/${movieId}`);
   };
+  const handleMoveAdd = () => {
+    navigate("/admin/movie-add");
+  };
+
   return (
     <div className={style.container}>
       <h1 style={{ textAlign: "center" }}>Movie List</h1>
@@ -93,6 +119,9 @@ export default function MovieList() {
             <SearchIcon />
           </IconButton>
         </Paper>
+        <Button onClick={handleMoveAdd} color="secondary" variant="contained">
+          Thêm phim
+        </Button>
       </div>
 
       <TableContainer component={Paper} className={style.tableContainer}>
@@ -177,6 +206,30 @@ export default function MovieList() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
+        >
+          Xóa thành công
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

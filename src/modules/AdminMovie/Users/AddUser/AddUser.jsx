@@ -200,10 +200,10 @@ export default function AddUser() {
                           onChange={handleChangeAuth}
                           name="maLoaiNguoiDung"
                         >
-                          <Select.Option value="quanTri">
+                          <Select.Option value="QuanTri">
                             Quản trị viên
                           </Select.Option>
-                          <Select.Option value="khachHang">
+                          <Select.Option value="KhachHang">
                             Khách hàng
                           </Select.Option>
                         </Select>

@@ -83,6 +83,7 @@ export default function AddMovie() {
     onSuccess: () => {
       alert("Thêm phim thành công");
       queryClient.invalidateQueries("movie-list");
+      navigate("/admin/movie-list");
     },
     onError: (error) => {
       const msg = error?.response?.data?.content || "Có lỗi xảy ra";
